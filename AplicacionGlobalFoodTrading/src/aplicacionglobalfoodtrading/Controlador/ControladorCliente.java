@@ -12,6 +12,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 /**
@@ -86,6 +87,53 @@ public class ControladorCliente {
         return exi;
         
     }
+    
+    
+    
+    public ArrayList<Cliente> ListadoClientes() {
+        ArrayList<Cliente> Listac = new ArrayList();
+        try {
+            Conectar();
+            String sql = "Select * from cliente order by apellido";
+            st = con.createStatement();
+            rs = st.executeQuery(sql);
+            while (rs.next()) {
+                Cliente c = new Cliente();
+                c.setTipoid(rs.getString(1));
+                c.setIdentificacion(rs.getString(2));
+                c.setNombre(rs.getString(3));
+                c.setApellido(rs.getString(4));
+                c.setPais(rs.getString(5));
+                c.setCiudad(rs.getString(6));
+                c.setProvincia(rs.getString(7));
+                c.setCodPostal(rs.getString(8));
+                c.setDireccion(rs.getString(9));
+                c.setCorreo(rs.getString(10));
+                c.setTelefono(rs.getString(11));
+                Listac.add(c);
+            }
+            
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage() + " en el Controlador Cliente", "Error", JOptionPane.ERROR_MESSAGE);
+            // System.out.println(sql);
+        }
+        return Listac;
+    }
+    
+    
+    public Cliente ClientexID(String id){
+        
+        Cliente c = null;
+        
+        for(Cliente cl : this.ListadoClientes()){
+            if(cl.getIdentificacion().equals(id)){
+                c = cl;
+            }
+        }
+        return c;
+    }
+    
+    
     
     
 }

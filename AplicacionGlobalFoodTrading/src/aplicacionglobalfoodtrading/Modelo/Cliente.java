@@ -16,11 +16,12 @@ public class Cliente {
     private String provincia;
     private String codPostal;
     private String direccion;
-
+    private String telefono;
+    private String correo;
     public Cliente() {
     }
 
-    public Cliente(String tipoid, String identificacion, String nombre, String apellido, String ciudad, String pais, String provincia, String codPostal, String direccion) {
+    public Cliente(String tipoid, String identificacion, String nombre, String apellido, String ciudad, String pais, String provincia, String codPostal, String direccion, String telefono, String correo) {
         this.tipoid = tipoid;
         this.identificacion = identificacion;
         this.nombre = nombre;
@@ -30,7 +31,11 @@ public class Cliente {
         this.provincia = provincia;
         this.codPostal = codPostal;
         this.direccion = direccion;
+        this.telefono = telefono;
+        this.correo = correo;
     }
+
+   
 
     public String getTipoid() {
         return tipoid;
@@ -102,6 +107,22 @@ public class Cliente {
 
     public void setDireccion(String direccion) {
         this.direccion = direccion;
+    }
+
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+
+    public String getCorreo() {
+        return correo;
+    }
+
+    public void setCorreo(String correo) {
+        this.correo = correo;
     }
     
     
