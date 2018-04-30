@@ -7,6 +7,7 @@ package aplicacionglobalfoodtrading.Controlador;
 
 import aplicacionglobalfoodtrading.Modelo.Categoria;
 import aplicacionglobalfoodtrading.Modelo.Cliente;
+import aplicacionglobalfoodtrading.Modelo.Empleado_Directo;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -134,6 +135,49 @@ public class ControladorCliente {
     }
     
     
+     public int ActualizarCliente(String id, Cliente c) {
+        String sql = "UPDATE `cliente` SET `tipoid`='"+c.getTipoid()+"',`nombres`='"+c.getNombre()+"',`apellidos`='"+c.getApellido()+"',`pais`='"+c.getPais()+"',`ciudad`='"+c.getCiudad()+"',`provincia`='"+c.getProvincia()+"',`cod_postal`='"+c.getCodPostal()+"',`direccion`='"+c.getDireccion()+"',`correo`='"+c.getCorreo()+"',`Telefono`='"+c.getTelefono()+"' WHERE identificacion = '"+c.getIdentificacion()+"'";
+
+        //System.out.println(sql);
+        Conectar();
+        int exi = 0;
+        try {
+            st = con.createStatement();
+            //System.out.println(sql2);
+            // st.execute(sql);
+            //exi = 1;
+            if (st.executeUpdate(sql) > 0) {
+                exi = 1;
+            } else {
+                exi = 0;
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage());
+            exi = 0;
+        }
+        return exi;
+    }
     
+    
+    public int EliminarCliente(String id) {
+        int exito = 0;
+        try {
+            Conectar();
+            st = con.createStatement();
+            String sql = "delete from cliente where identificacion = '" + id + "'";
+            //st.execute(sql);
+            //exito = 1;
+            if (st.executeUpdate(sql) > 0) {
+                exito = 1;
+            } else {
+                exito = 0;
+            }
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            exito = 0;
+        }
+        return exito;
+    }
     
 }
