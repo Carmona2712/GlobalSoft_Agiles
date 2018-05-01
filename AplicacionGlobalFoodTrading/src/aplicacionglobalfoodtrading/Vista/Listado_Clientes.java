@@ -5,37 +5,38 @@
  */
 package aplicacionglobalfoodtrading.Vista;
 
-import aplicacionglobalfoodtrading.Controlador.Controlador_Empleado_Directo;
+import aplicacionglobalfoodtrading.Controlador.ControladorCliente;
 import aplicacionglobalfoodtrading.Modelo.Cliente;
 import aplicacionglobalfoodtrading.Modelo.Empleado_Directo;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
-public class Lista_Empleados_Directos extends javax.swing.JFrame {
+/**
+ *
+ * @author Ricardo Carmona
+ */
+public class Listado_Clientes extends javax.swing.JFrame {
 
-    Controlador_Empleado_Directo ced = new Controlador_Empleado_Directo();
+    ControladorCliente ccl = new ControladorCliente();
     DefaultTableModel modelo = new DefaultTableModel();
-
-    public Lista_Empleados_Directos() {
-//        this.setDefaultLookAndFeelDecorated(true);
-//        SubstanceLookAndFeel.setSkin("org.jvnet.substance.skin.CremeCoffeeSkin");
+    public Listado_Clientes() {
         initComponents();
         CrearTabla();
         CargarTablaGeneral();
     }
 
-    public void CrearTabla() {
-        String titulos[] = {"Tipo ID", "Identificacion", "Nombres", "Apellidos", "Genero", "Pais", "Ciudad", "Direccion", "Celular", "E-mail", "Cargo", "Salario"};
+   public void CrearTabla() {
+        String titulos[] = {"Tipo ID", "Identificacion", "Nombres", "Apellidos", "Pais", "Ciudad", "Provincia", "Telefono", "E-mail", "Direccion"};
         modelo.setColumnIdentifiers(titulos);
         TablaClientes.setModel(modelo);
     }
 
     public void CargarTablaGeneral() {
-        ArrayList<Empleado_Directo> led = new ArrayList();
+        ArrayList<Cliente> led = new ArrayList();
         try {
             LimpiarTabla();
-            led = this.ced.ListaEmpleadosDirectos();
+            led = this.ccl.ListadoClientes();
 
 //                 for(Empleado_Directo d : led){
 //                     System.out.println("Cedula : "+d.getIdentificacion());
@@ -44,76 +45,22 @@ public class Lista_Empleados_Directos extends javax.swing.JFrame {
                 System.out.println("Esta vacio el arraylist");
             }
 
-            for (Empleado_Directo e : led) {
-                String datos[] = {e.getTipoid(), e.getIdentificacion(), e.getNombre(), e.getApellido(), e.getGenero(), e.getPais(), e.getCiudad(), e.getDireccion(), e.getTel_movil(), e.getEmail(), e.getCargo(), String.valueOf(e.getSalario())};
+            for (Cliente c : led) {
+                String datos[] = {c.getTipoid(), c.getIdentificacion(), c.getNombre(), c.getApellido(), c.getPais(), c.getCiudad(),c.getProvincia(),c.getTelefono(),c.getCorreo() ,c.getDireccion()};
                 modelo.addRow(datos);
             }
         } catch (java.lang.NullPointerException ex) {
             JOptionPane.showMessageDialog(null, "Error de carga de datos en tabla " + ex.getMessage());
         }
     }
-
-    public void CargarTablaxIdentificacion() {
-        ArrayList<Empleado_Directo> led = new ArrayList();
-        try {
-            LimpiarTabla();
-            led = this.ced.ListaEmpleadosDirectosOrderByIdentificacion(this.txtbuscar.getText());
-
-//                 for(Empleado_Directo d : led){
-//                     System.out.println("Cedula : "+d.getIdentificacion());
-//                 }
-            for (Empleado_Directo e : led) {
-                String datos[] = {e.getTipoid(), e.getIdentificacion(), e.getNombre(), e.getApellido(), e.getGenero(), e.getPais(), e.getCiudad(), e.getDireccion(), e.getTel_movil(), e.getEmail(), e.getCargo(), String.valueOf(e.getSalario())};
-                modelo.addRow(datos);
-            }
-        } catch (java.lang.NullPointerException ex) {
-            JOptionPane.showMessageDialog(null, "Error de carga de datos en tabla " + ex.getMessage());
-        }
-    }
-
-    public void CargarTablaxPais() {
-        ArrayList<Empleado_Directo> led = new ArrayList();
-        try {
-            LimpiarTabla();
-            led = this.ced.ListaEmpleadosDirectosOrderByPais(this.txtbuscar.getText());
-
-//                 for(Empleado_Directo d : led){
-//                     System.out.println("Cedula : "+d.getIdentificacion());
-//                 }
-            for (Empleado_Directo e : led) {
-                String datos[] = {e.getTipoid(), e.getIdentificacion(), e.getNombre(), e.getApellido(), e.getGenero(), e.getPais(), e.getCiudad(), e.getDireccion(), e.getTel_movil(), e.getEmail(), e.getCargo(), String.valueOf(e.getSalario())};
-                modelo.addRow(datos);
-            }
-        } catch (java.lang.NullPointerException ex) {
-            JOptionPane.showMessageDialog(null, "Error de carga de datos en tabla " + ex.getMessage());
-        }
-    }
-
-    public void CargarTablaxCargo() {
-        ArrayList<Empleado_Directo> led = new ArrayList();
-        try {
-            LimpiarTabla();
-            led = this.ced.ListaEmpleadosDirectosOrderByCargo(this.txtbuscar.getText());
-
-//                 for(Empleado_Directo d : led){
-//                     System.out.println("Cedula : "+d.getIdentificacion());
-//                 }
-            for (Empleado_Directo e : led) {
-                String datos[] = {e.getTipoid(), e.getIdentificacion(), e.getNombre(), e.getApellido(), e.getGenero(), e.getPais(), e.getCiudad(), e.getDireccion(), e.getTel_movil(), e.getEmail(), e.getCargo(), String.valueOf(e.getSalario())};
-                modelo.addRow(datos);
-            }
-        } catch (java.lang.NullPointerException ex) {
-            JOptionPane.showMessageDialog(null, "Error de carga de datos en tabla " + ex.getMessage());
-        }
-    }
-
-    public void LimpiarTabla() {
+    
+    
+     public void LimpiarTabla() {
         int filas = TablaClientes.getRowCount();
         for (int i = 0; filas > i; i++) {
             modelo.removeRow(0);
         }
     }
-
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -132,7 +79,6 @@ public class Lista_Empleados_Directos extends javax.swing.JFrame {
         txtbuscar = new javax.swing.JTextField();
 
         jMenuItem1.setText("Ver Informacion Completa");
-        jMenuItem1.setToolTipText("");
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem1ActionPerformed(evt);
@@ -140,8 +86,7 @@ public class Lista_Empleados_Directos extends javax.swing.JFrame {
         });
         jPopupMenu1.add(jMenuItem1);
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Listado de Empleados Directos");
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -179,7 +124,7 @@ public class Lista_Empleados_Directos extends javax.swing.JFrame {
         });
 
         jLabel1.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
-        jLabel1.setText("LISTADO DE EMPLEADOS DIRECTOS");
+        jLabel1.setText("LISTADO DE CLIENTES");
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
         jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -261,7 +206,7 @@ public class Lista_Empleados_Directos extends javax.swing.JFrame {
                         .addGap(33, 33, 33)
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(146, 146, 146)
+                        .addGap(269, 269, 269)
                         .addComponent(jLabel1)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
@@ -298,10 +243,6 @@ public class Lista_Empleados_Directos extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void TablaClientesKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TablaClientesKeyPressed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_TablaClientesKeyPressed
-
     private void TablaClientesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TablaClientesMouseClicked
         if (evt.getClickCount() == 1) {
             System.out.println("Se ha hecho un click");
@@ -311,45 +252,19 @@ public class Lista_Empleados_Directos extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_TablaClientesMouseClicked
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void TablaClientesKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TablaClientesKeyPressed
         // TODO add your handling code here:
-        Empleado_Directo ed = new Empleado_Directo();
-        int f;
-        int c = 1;
-        if (TablaClientes.getSelectedRow() < 0) {
-            JOptionPane.showMessageDialog(null, "Debe seleccionar una fila con registro valido");
-        } else {
-            f = TablaClientes.getSelectedRow();
-            String id = String.valueOf(TablaClientes.getValueAt(f, c));
-            ed = ced.Empleadoxid(id);
-            Registro_Empleados_Directos re = new Registro_Empleados_Directos(ed);
-            re.setVisible(true);
-        }
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_TablaClientesKeyPressed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void txtbuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtbuscarKeyReleased
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-
-        if (CboOpcion.getSelectedItem().toString().equals("Pais")) {
-            CargarTablaxPais();
-        }
-        if (CboOpcion.getSelectedItem().toString().equals("Apellido")) {
-            CargarTablaGeneral();
-        }
-        if (CboOpcion.getSelectedItem().toString().equals("Identificacion")) {
-            CargarTablaxIdentificacion();
-        }
-        if (CboOpcion.getSelectedItem().toString().equals("Cargo")) {
-            CargarTablaxCargo();
-        }
-
-
-    }//GEN-LAST:event_txtbuscarKeyReleased
+      
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     private void CboOpcionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CboOpcionActionPerformed
         // TODO add your handling code here:
@@ -359,20 +274,28 @@ public class Lista_Empleados_Directos extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnBuscarActionPerformed
 
+    private void txtbuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtbuscarKeyReleased
+        // TODO add your handling code here:
+
+
+    }//GEN-LAST:event_txtbuscarKeyReleased
+
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         // TODO add your handling code here:
         
         if(TablaClientes.getSelectedRow()<0){
-            JOptionPane.showMessageDialog(null, "No hay Empleado seleccionado");
+            JOptionPane.showMessageDialog(null,"Debe seleccionar Una Fila");
         }else{
+            
+            int c = 1;
             int f = TablaClientes.getSelectedRow();
-            String cedula = TablaClientes.getValueAt(f,1).toString();
             
-            Empleado_Directo ed = ced.Empleadoxid(cedula);
+            String id = TablaClientes.getValueAt(f, c).toString();
             
-            Registro_Empleados_Directos reg = new Registro_Empleados_Directos(ed);
-            reg.setVisible(true);
+            Cliente clien = ccl.ClientexID(id);
             
+            Cliente_Vista cv = new Cliente_Vista(clien);
+            cv.setVisible(true);
         }
         
         
@@ -389,26 +312,26 @@ public class Lista_Empleados_Directos extends javax.swing.JFrame {
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("windows".equals(info.getName())) {
+                if ("Windows".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Lista_Empleados_Directos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Listado_Clientes.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Lista_Empleados_Directos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Listado_Clientes.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Lista_Empleados_Directos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Listado_Clientes.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Lista_Empleados_Directos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Listado_Clientes.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Lista_Empleados_Directos().setVisible(true);
+                new Listado_Clientes().setVisible(true);
             }
         });
     }

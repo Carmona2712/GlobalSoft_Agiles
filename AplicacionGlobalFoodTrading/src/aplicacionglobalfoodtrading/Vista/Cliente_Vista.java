@@ -17,7 +17,7 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 public class Cliente_Vista extends javax.swing.JFrame {
-
+    
     ControladorCiudades cc = new ControladorCiudades();
     ControladorPais cp = new ControladorPais();
     Pais pac;
@@ -25,7 +25,7 @@ public class Cliente_Vista extends javax.swing.JFrame {
     private static ResultSet rs;
     private static Statement st;
     ControladorCliente ccl = new ControladorCliente();
-
+    
     public Cliente_Vista() {
         initComponents();
         CargarComboPaises();
@@ -33,7 +33,15 @@ public class Cliente_Vista extends javax.swing.JFrame {
         CargarComboCiudadesXPais(pac.getCodigo());
     }
     
-    public void CargarForm(Cliente c){
+    public Cliente_Vista(Cliente c) {
+        initComponents();
+        CargarComboPaises();
+        pac = cp.CodPaisXNombre(cboPais.getSelectedItem().toString());
+        CargarComboCiudadesXPais(pac.getCodigo());
+        CargarForm(c);        
+    }
+    
+    public void CargarForm(Cliente c) {
         cboCiudad.setSelectedItem(c.getCiudad());
         cboPais.setSelectedItem(c.getPais());
         cboTipoId.setSelectedItem(c.getTipoid());
@@ -46,9 +54,9 @@ public class Cliente_Vista extends javax.swing.JFrame {
         txtCodPostal.setText(c.getCodPostal());
         txtDireccion.setText(c.getDireccion());
     }
-
+    
     public void LimpiarCampos() {
-
+        
         cboCiudad.setSelectedIndex(0);
         cboPais.setSelectedIndex(0);
         cboTipoId.setSelectedIndex(0);
@@ -61,9 +69,9 @@ public class Cliente_Vista extends javax.swing.JFrame {
         txtCodPostal.setText("");
         txtDireccion.setText("");
     }
-
+    
     public void Conectar() {
-
+        
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             this.con = DriverManager.getConnection("jdbc:mysql://localhost:3306/bd_gft", "root", "");
@@ -71,40 +79,40 @@ public class Cliente_Vista extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Error al conectar BD");
         }
     }
-
+    
     public void CargarComboPaises() {
         ArrayList<Pais> lp = new ArrayList();
-
+        
         try {
             lp = cp.ListaPaises();
             this.cboPais.removeAllItems();
             for (Pais p : lp) {
                 this.cboPais.addItem(p.getPais());
             }
-
+            
         } catch (SQLException ex) {
             Logger.getLogger(Registro_Empleados_Directos.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        
     }
-
+    
     public void CargarComboCiudadesXPais(String cod) {
-
+        
         ArrayList<Ciudad> lc = new ArrayList();
-
+        
         try {
             lc = cc.ListaCiudadxPais(cod);
             this.cboCiudad.removeAllItems();
             for (Ciudad c : lc) {
                 this.cboCiudad.addItem(c.getCiudad());
             }
-
+            
         } catch (SQLException ex) {
             Logger.getLogger(Registro_Empleados_Directos.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        
     }
-
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -492,37 +500,38 @@ public class Cliente_Vista extends javax.swing.JFrame {
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         // TODO add your handling code here:
-            if (txtIdentificacion.getText().isEmpty()) {
+        if (txtIdentificacion.getText().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Debe ingresar una identificacion !!!");
         } else {
-                if(ccl.EliminarCliente(txtIdentificacion.getText())==1){
-                    LimpiarCampos();
-                    JOptionPane.showMessageDialog(null,"Se elimino Correctamente el Cliente !!!");
-                }else{
-                     JOptionPane.showMessageDialog(null,"Error al eliminar el Cliente !!!");
-                }
-                
+            if (ccl.EliminarCliente(txtIdentificacion.getText()) == 1) {
+                LimpiarCampos();
+                JOptionPane.showMessageDialog(null, "Se elimino Correctamente el Cliente !!!");
+            } else {
+                JOptionPane.showMessageDialog(null, "Error al eliminar el Cliente !!!");
             }
             
+        }
+        
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void btnListaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListaActionPerformed
-
+        Listado_Clientes lc = new Listado_Clientes();
+        lc.setVisible(true);
     }//GEN-LAST:event_btnListaActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         // TODO add your handling code here:
-       if (txtIdentificacion.getText().isEmpty()) {
+        if (txtIdentificacion.getText().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Debe ingresar una identificacion !!!");
         } else {
-            if(ccl.ClientexID(txtIdentificacion.getText())==null){
-                JOptionPane.showMessageDialog(null,"No se encontro el cliente a buscar !!!");
-            }else{
+            if (ccl.ClientexID(txtIdentificacion.getText()) == null) {
+                JOptionPane.showMessageDialog(null, "No se encontro el cliente a buscar !!!");
+            } else {
                 
                 CargarForm(ccl.ClientexID(txtIdentificacion.getText()));
                 
             }
-       }
+        }
 
     }//GEN-LAST:event_btnBuscarActionPerformed
 
@@ -537,7 +546,7 @@ public class Cliente_Vista extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAtrasActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-     
+        
         if (txtIdentificacion.getText().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Debe ingresar una identificacion !!!");
         } else {
@@ -553,7 +562,7 @@ public class Cliente_Vista extends javax.swing.JFrame {
             c.setTelefono(txtTelefono.getText());
             c.setCodPostal(txtCodPostal.getText());
             c.setDireccion(txtDireccion.getText());
-            if (ccl.ActualizarCliente(txtIdentificacion.getText(),c) == 1) {
+            if (ccl.ActualizarCliente(txtIdentificacion.getText(), c) == 1) {
                 LimpiarCampos();
                 JOptionPane.showMessageDialog(null, "Se Actualizo Correctamente el Cliente");
             } else {
@@ -587,7 +596,7 @@ public class Cliente_Vista extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Error en el registro de el Cliente");
             }
         }
-
+        
 
     }//GEN-LAST:event_btnGuardarActionPerformed
 
