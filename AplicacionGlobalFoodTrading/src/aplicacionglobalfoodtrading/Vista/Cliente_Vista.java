@@ -1,8 +1,10 @@
 package aplicacionglobalfoodtrading.Vista;
 
 import aplicacionglobalfoodtrading.Controlador.ControladorCiudades;
+import aplicacionglobalfoodtrading.Controlador.ControladorCliente;
 import aplicacionglobalfoodtrading.Controlador.ControladorPais;
 import aplicacionglobalfoodtrading.Modelo.Ciudad;
+import aplicacionglobalfoodtrading.Modelo.Cliente;
 import aplicacionglobalfoodtrading.Modelo.Pais;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -22,12 +24,42 @@ public class Cliente_Vista extends javax.swing.JFrame {
     private static Connection con;
     private static ResultSet rs;
     private static Statement st;
+    ControladorCliente ccl = new ControladorCliente();
 
     public Cliente_Vista() {
         initComponents();
         CargarComboPaises();
         pac = cp.CodPaisXNombre(cboPais.getSelectedItem().toString());
         CargarComboCiudadesXPais(pac.getCodigo());
+    }
+    
+    public void CargarForm(Cliente c){
+        cboCiudad.setSelectedItem(c.getCiudad());
+        cboPais.setSelectedItem(c.getPais());
+        cboTipoId.setSelectedItem(c.getTipoid());
+        txtIdentificacion.setText(c.getIdentificacion());
+        txtNombres.setText(c.getNombre());
+        txtApellidos.setText(c.getApellido());
+        txtProvincia.setText(c.getProvincia());
+        txtCorreo.setText(c.getCorreo());
+        txtTelefono.setText(c.getTelefono());
+        txtCodPostal.setText(c.getCodPostal());
+        txtDireccion.setText(c.getDireccion());
+    }
+
+    public void LimpiarCampos() {
+
+        cboCiudad.setSelectedIndex(0);
+        cboPais.setSelectedIndex(0);
+        cboTipoId.setSelectedIndex(0);
+        txtIdentificacion.setText("");
+        txtNombres.setText("");
+        txtApellidos.setText("");
+        txtProvincia.setText("");
+        txtCorreo.setText("");
+        txtTelefono.setText("");
+        txtCodPostal.setText("");
+        txtDireccion.setText("");
     }
 
     public void Conectar() {
@@ -90,11 +122,11 @@ public class Cliente_Vista extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
-        jTextField5 = new javax.swing.JTextField();
+        txtIdentificacion = new javax.swing.JTextField();
+        cboTipoId = new javax.swing.JComboBox<>();
+        txtNombres = new javax.swing.JTextField();
+        txtApellidos = new javax.swing.JTextField();
+        txtProvincia = new javax.swing.JTextField();
         cboPais = new javax.swing.JComboBox<>();
         cboCiudad = new javax.swing.JComboBox<>();
         jPanel3 = new javax.swing.JPanel();
@@ -108,12 +140,12 @@ public class Cliente_Vista extends javax.swing.JFrame {
         jPanel4 = new javax.swing.JPanel();
         jLabel13 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
-        jTextField6 = new javax.swing.JTextField();
+        txtCodPostal = new javax.swing.JTextField();
         jLabel16 = new javax.swing.JLabel();
-        jTextField7 = new javax.swing.JTextField();
-        jTextField8 = new javax.swing.JTextField();
+        txtTelefono = new javax.swing.JTextField();
+        txtCorreo = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
+        txtDireccion = new javax.swing.JTextField();
 
         jLabel9.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel9.setText("jLabel1");
@@ -129,6 +161,8 @@ public class Cliente_Vista extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Gestion de  Clientes");
+        setPreferredSize(new java.awt.Dimension(1000, 522));
+        setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setToolTipText("");
@@ -157,17 +191,17 @@ public class Cliente_Vista extends javax.swing.JFrame {
         jLabel7.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel7.setText("Provincia");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Cedula Ciudadania", "Cedula Extranjeria", "Pasaporte", "Otro" }));
+        cboTipoId.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Cedula Ciudadania", "Cedula Extranjeria", "Pasaporte", "Otro" }));
 
-        jTextField2.addActionListener(new java.awt.event.ActionListener() {
+        txtNombres.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField2ActionPerformed(evt);
+                txtNombresActionPerformed(evt);
             }
         });
 
-        jTextField5.addActionListener(new java.awt.event.ActionListener() {
+        txtProvincia.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField5ActionPerformed(evt);
+                txtProvinciaActionPerformed(evt);
             }
         });
 
@@ -190,14 +224,11 @@ public class Cliente_Vista extends javax.swing.JFrame {
                     .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField1)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jComboBox1, 0, 250, Short.MAX_VALUE)
-                            .addComponent(jTextField2)
-                            .addComponent(jTextField3))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addGap(26, 26, 26)
+                    .addComponent(cboTipoId, 0, 291, Short.MAX_VALUE)
+                    .addComponent(txtIdentificacion)
+                    .addComponent(txtNombres)
+                    .addComponent(txtApellidos))
+                .addGap(86, 86, 86)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel5)
                     .addComponent(jLabel6)
@@ -206,7 +237,7 @@ public class Cliente_Vista extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(cboPais, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(cboCiudad, 0, 257, Short.MAX_VALUE)
-                    .addComponent(jTextField5))
+                    .addComponent(txtProvincia))
                 .addGap(23, 23, 23))
         );
         jPanel2Layout.setVerticalGroup(
@@ -217,22 +248,22 @@ public class Cliente_Vista extends javax.swing.JFrame {
                     .addComponent(jLabel1)
                     .addComponent(cboPais, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cboTipoId, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(jLabel2)
                     .addComponent(cboCiudad, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtIdentificacion, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtNombres, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtProvincia, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3)
                     .addComponent(jLabel7))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtApellidos, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -331,17 +362,17 @@ public class Cliente_Vista extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(26, 26, 26)
                 .addComponent(btnAtras)
-                .addGap(48, 48, 48)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 75, Short.MAX_VALUE)
                 .addComponent(btnGuardar)
-                .addGap(51, 51, 51)
+                .addGap(68, 68, 68)
                 .addComponent(btnBuscar)
-                .addGap(44, 44, 44)
+                .addGap(54, 54, 54)
                 .addComponent(btnLista)
-                .addGap(47, 47, 47)
+                .addGap(50, 50, 50)
                 .addComponent(btnEditar)
-                .addGap(43, 43, 43)
+                .addGap(76, 76, 76)
                 .addComponent(btnLimpiar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
+                .addGap(65, 65, 65)
                 .addComponent(jButton7)
                 .addGap(26, 26, 26))
         );
@@ -373,7 +404,7 @@ public class Cliente_Vista extends javax.swing.JFrame {
         jLabel16.setText("Cod Postal");
 
         jLabel8.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel8.setText("Cod. Postal");
+        jLabel8.setText("Direccion");
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -386,16 +417,16 @@ public class Cliente_Vista extends javax.swing.JFrame {
                     .addComponent(jLabel16, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jTextField6, javax.swing.GroupLayout.DEFAULT_SIZE, 259, Short.MAX_VALUE)
-                    .addComponent(jTextField8))
+                    .addComponent(txtCodPostal, javax.swing.GroupLayout.DEFAULT_SIZE, 259, Short.MAX_VALUE)
+                    .addComponent(txtCorreo))
                 .addGap(43, 43, 43)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel13)
                     .addComponent(jLabel8))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField7)
-                    .addComponent(jTextField4))
+                    .addComponent(txtTelefono)
+                    .addComponent(txtDireccion))
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
@@ -404,15 +435,15 @@ public class Cliente_Vista extends javax.swing.JFrame {
                 .addGap(22, 22, 22)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(jLabel14)
-                    .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel13)
-                    .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(27, 27, 27)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtCodPostal, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel16)
                     .addComponent(jLabel8)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtDireccion, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -426,9 +457,9 @@ public class Cliente_Vista extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                         .addGap(33, 33, 33)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addGap(57, 57, 57))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -436,7 +467,7 @@ public class Cliente_Vista extends javax.swing.JFrame {
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(20, 20, 20)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(35, 35, 35))
         );
@@ -455,13 +486,24 @@ public class Cliente_Vista extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
+    private void txtNombresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombresActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField2ActionPerformed
+    }//GEN-LAST:event_txtNombresActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         // TODO add your handling code here:
-
+            if (txtIdentificacion.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Debe ingresar una identificacion !!!");
+        } else {
+                if(ccl.EliminarCliente(txtIdentificacion.getText())==1){
+                    LimpiarCampos();
+                    JOptionPane.showMessageDialog(null,"Se elimino Correctamente el Cliente !!!");
+                }else{
+                     JOptionPane.showMessageDialog(null,"Error al eliminar el Cliente !!!");
+                }
+                
+            }
+            
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void btnListaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListaActionPerformed
@@ -470,13 +512,23 @@ public class Cliente_Vista extends javax.swing.JFrame {
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         // TODO add your handling code here:
-
+       if (txtIdentificacion.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Debe ingresar una identificacion !!!");
+        } else {
+            if(ccl.ClientexID(txtIdentificacion.getText())==null){
+                JOptionPane.showMessageDialog(null,"No se encontro el cliente a buscar !!!");
+            }else{
+                
+                CargarForm(ccl.ClientexID(txtIdentificacion.getText()));
+                
+            }
+       }
 
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
         // TODO add your handling code here:
-
+        LimpiarCampos();
     }//GEN-LAST:event_btnLimpiarActionPerformed
 
     private void btnAtrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtrasActionPerformed
@@ -485,18 +537,63 @@ public class Cliente_Vista extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAtrasActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-
-
+     
+        if (txtIdentificacion.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Debe ingresar una identificacion !!!");
+        } else {
+            Cliente c = new Cliente();
+            c.setTipoid(cboTipoId.getSelectedItem().toString());
+            c.setIdentificacion(txtIdentificacion.getText());
+            c.setNombre(txtNombres.getText());
+            c.setApellido(txtApellidos.getText());
+            c.setProvincia(txtProvincia.getText());
+            c.setPais(cboPais.getSelectedItem().toString());
+            c.setCiudad(cboCiudad.getSelectedItem().toString());
+            c.setCorreo(txtCorreo.getText());
+            c.setTelefono(txtTelefono.getText());
+            c.setCodPostal(txtCodPostal.getText());
+            c.setDireccion(txtDireccion.getText());
+            if (ccl.ActualizarCliente(txtIdentificacion.getText(),c) == 1) {
+                LimpiarCampos();
+                JOptionPane.showMessageDialog(null, "Se Actualizo Correctamente el Cliente");
+            } else {
+                JOptionPane.showMessageDialog(null, "Error en la modificacion de el Cliente");
+            }
+        }
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         // TODO add your handling code here:
 
+        if (txtIdentificacion.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Debe ingresar una identificacion !!!");
+        } else {
+            Cliente c = new Cliente();
+            c.setTipoid(cboTipoId.getSelectedItem().toString());
+            c.setIdentificacion(txtIdentificacion.getText());
+            c.setNombre(txtNombres.getText());
+            c.setApellido(txtApellidos.getText());
+            c.setProvincia(txtProvincia.getText());
+            c.setPais(cboPais.getSelectedItem().toString());
+            c.setCiudad(cboCiudad.getSelectedItem().toString());
+            c.setCorreo(txtCorreo.getText());
+            c.setTelefono(txtTelefono.getText());
+            c.setCodPostal(txtCodPostal.getText());
+            c.setDireccion(txtDireccion.getText());
+            if (ccl.RegistrarCliente(c) == 1) {
+                LimpiarCampos();
+                JOptionPane.showMessageDialog(null, "Se registro Correctamente el Cliente");
+            } else {
+                JOptionPane.showMessageDialog(null, "Error en el registro de el Cliente");
+            }
+        }
+
+
     }//GEN-LAST:event_btnGuardarActionPerformed
 
-    private void jTextField5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField5ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField5ActionPerformed
+    private void txtProvinciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtProvinciaActionPerformed
+
+    }//GEN-LAST:event_txtProvinciaActionPerformed
 
     private void cboPaisItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cboPaisItemStateChanged
         // TODO add your handling code here:
@@ -515,7 +612,7 @@ public class Cliente_Vista extends javax.swing.JFrame {
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
+                if ("Windows".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
@@ -548,8 +645,8 @@ public class Cliente_Vista extends javax.swing.JFrame {
     private javax.swing.JButton btnLista;
     private javax.swing.JComboBox<String> cboCiudad;
     private javax.swing.JComboBox<String> cboPais;
+    private javax.swing.JComboBox<String> cboTipoId;
     private javax.swing.JButton jButton7;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -569,13 +666,13 @@ public class Cliente_Vista extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
-    private javax.swing.JTextField jTextField7;
-    private javax.swing.JTextField jTextField8;
+    private javax.swing.JTextField txtApellidos;
+    private javax.swing.JTextField txtCodPostal;
+    private javax.swing.JTextField txtCorreo;
+    private javax.swing.JTextField txtDireccion;
+    private javax.swing.JTextField txtIdentificacion;
+    private javax.swing.JTextField txtNombres;
+    private javax.swing.JTextField txtProvincia;
+    private javax.swing.JTextField txtTelefono;
     // End of variables declaration//GEN-END:variables
 }

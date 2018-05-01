@@ -66,7 +66,7 @@ public class ControladorCliente {
     
     public int RegistrarCliente(Cliente c) {
         int exi = 0;
-        String sql = "INSERT INTO `cliente`(`tipoid`, `identificacion`, `nombres`, `apellidos`, `pais`, `ciudad`, `provincia`, `cod_postal`, `direccion`) VALUES ('"+c.getTipoid()+"','"+c.getIdentificacion()+"','"+c.getNombre()+"','"+c.getApellido()+"','"+c.getPais()+"','"+c.getCiudad()+"','"+c.getProvincia()+"','"+c.getCodPostal()+"')";
+        String sql = "INSERT INTO `cliente`(`tipoid`, `identificacion`, `nombres`, `apellidos`, `pais`, `ciudad`, `provincia`, `cod_postal`,`Telefono`,`direccion`,`correo`) VALUES ('"+c.getTipoid()+"','"+c.getIdentificacion()+"','"+c.getNombre()+"','"+c.getApellido()+"','"+c.getPais()+"','"+c.getCiudad()+"','"+c.getProvincia()+"','"+c.getCodPostal()+"','"+c.getTelefono()+"','"+c.getDireccion()+"','"+c.getCorreo()+"')";
         try {
             Conectar();
             //System.out.println(sql);
@@ -95,7 +95,7 @@ public class ControladorCliente {
         ArrayList<Cliente> Listac = new ArrayList();
         try {
             Conectar();
-            String sql = "Select * from cliente order by apellido";
+            String sql = "Select * from cliente order by apellidos";
             st = con.createStatement();
             rs = st.executeQuery(sql);
             while (rs.next()) {
