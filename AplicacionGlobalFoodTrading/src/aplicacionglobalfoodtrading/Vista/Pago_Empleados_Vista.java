@@ -20,26 +20,48 @@ public class Pago_Empleados_Vista extends javax.swing.JFrame {
 
     Controlador_Pago_Empleado cpe = new Controlador_Pago_Empleado();
     Controlador_Horas ch = new Controlador_Horas();
+
     public Pago_Empleados_Vista() {
         initComponents();
         txtCodigPago.setText(GenerarCodigo());
     }
+    
+    public void LimpiarForm(){
+        
+        txtCodigPago.setText(String.valueOf(GenerarCodigo()));
+        txtIDentificacion.setText("");
+        TxtNota.setText("");
+        txTNombres.setText("");
+        txtApellidos.setText("");
+        txtCorreo.setText("");
+        txtTelefono.setText("");
+        txtTipoId.setText("");
+        txtDireccion.setText("");
+        txtHorasExtras.setText("");
+        txtHorasNocturnas.setText("");
+        cboMesPagado.setSelectedIndex(0);
+        txtRecargoAdicional.setText("");
+        txtTotalRecargos.setText("");
+        txtTotalPago.setText("");
+     
+    }
+    
 
-   public String GenerarCodigo(){
-            int cod = 1;
-       if(cpe.ListadoPagoEmpleados().isEmpty()){
-           cod = 1;
-       }else{
-           
-           cod = Integer.parseInt(cpe.ListadoPagoEmpleados().get(cpe.ListadoPagoEmpleados().size()-1).getCodigo_Pago());
-           cod = cod++;
-       }
-       
-       String codigo = String.valueOf(cod);
-       
-       
-       return codigo;
-   }
+    public String GenerarCodigo() {
+        int cod = 1;
+        if (cpe.ListadoPagoEmpleados().isEmpty()) {
+            cod = 1;
+        } else {
+
+            cod = Integer.parseInt(cpe.ListadoPagoEmpleados().get(cpe.ListadoPagoEmpleados().size() - 1).getCodigo_Pago());
+            cod = cod++;
+        }
+
+        String codigo = String.valueOf(cod);
+
+        return codigo;
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -61,7 +83,7 @@ public class Pago_Empleados_Vista extends javax.swing.JFrame {
         txtCorreo = new javax.swing.JTextField();
         txtDireccion = new javax.swing.JTextField();
         jLabel16 = new javax.swing.JLabel();
-        dateChooserCombo1 = new datechooser.beans.DateChooserCombo();
+        txtFechaPago = new datechooser.beans.DateChooserCombo();
         jButton5 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
@@ -84,6 +106,8 @@ public class Pago_Empleados_Vista extends javax.swing.JFrame {
         jLabel17 = new javax.swing.JLabel();
         CambiarHorasNocturnas = new javax.swing.JButton();
         CambiarHorasDiurnas = new javax.swing.JButton();
+        jLabel18 = new javax.swing.JLabel();
+        cboMesPagado = new javax.swing.JComboBox<>();
         jPanel4 = new javax.swing.JPanel();
         jButton7 = new javax.swing.JButton();
         btnLista = new javax.swing.JButton();
@@ -177,7 +201,7 @@ public class Pago_Empleados_Vista extends javax.swing.JFrame {
                     .addComponent(txtDireccion, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 254, Short.MAX_VALUE)
                     .addComponent(txtTelefono)
                     .addComponent(txtCorreo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 254, Short.MAX_VALUE)
-                    .addComponent(dateChooserCombo1, javax.swing.GroupLayout.DEFAULT_SIZE, 254, Short.MAX_VALUE))
+                    .addComponent(txtFechaPago, javax.swing.GroupLayout.DEFAULT_SIZE, 254, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -188,7 +212,7 @@ public class Pago_Empleados_Vista extends javax.swing.JFrame {
                     .addComponent(jLabel3)
                     .addComponent(txtIDentificacion, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel16)
-                    .addComponent(dateChooserCombo1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtFechaPago, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
@@ -240,6 +264,7 @@ public class Pago_Empleados_Vista extends javax.swing.JFrame {
         jLabel11.setText("Salario Base");
 
         txtTotalPago.setEditable(false);
+        txtTotalPago.setText("0.0");
 
         jLabel12.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel12.setText("Total Recargos");
@@ -304,42 +329,57 @@ public class Pago_Empleados_Vista extends javax.swing.JFrame {
             }
         });
 
+        jLabel18.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel18.setText("Codigo Pago");
+
+        cboMesPagado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" }));
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel9)
-                    .addComponent(jLabel10)
-                    .addComponent(jLabel11)
-                    .addComponent(jLabel15)
-                    .addComponent(jLabel17))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                        .addComponent(txtCodigPago, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 91, Short.MAX_VALUE)
-                        .addComponent(jLabel12))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel9)
+                            .addComponent(jLabel10)
+                            .addComponent(jLabel11)
+                            .addComponent(jLabel15))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                                 .addComponent(txtHorasExtras)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(CambiarHorasDiurnas, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(79, 79, 79))
+                                .addComponent(CambiarHorasDiurnas, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(txtSalarioBase, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 211, Short.MAX_VALUE)
+                                    .addComponent(txtSalarioBase, javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(txtRecargoAdicional, javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtHorasNocturnas))
+                                    .addComponent(txtHorasNocturnas, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(CambiarHorasNocturnas, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                .addComponent(CambiarHorasNocturnas, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(119, 119, 119)
+                        .addComponent(jLabel14))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(78, 78, 78)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(jLabel18)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(cboMesPagado, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(jLabel17)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(txtCodigPago, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel14, javax.swing.GroupLayout.Alignment.TRAILING))))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGap(91, 91, 91)
+                                .addComponent(jLabel12))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                                .addGap(119, 119, 119)
+                                .addComponent(jLabel13)))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtTotalRecargos)
@@ -357,15 +397,27 @@ public class Pago_Empleados_Vista extends javax.swing.JFrame {
                     .addComponent(jLabel17)
                     .addComponent(txtTotalRecargos, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(jLabel13)
-                    .addComponent(txtHorasExtras, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel9)
-                    .addComponent(txtTotalPago, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(CambiarHorasDiurnas, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                            .addComponent(jLabel13)
+                            .addComponent(txtTotalPago, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(jLabel14)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(jScrollPane1)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel18)
+                            .addComponent(cboMesPagado, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                            .addComponent(txtHorasExtras, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel9)
+                            .addComponent(CambiarHorasDiurnas, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                             .addComponent(txtHorasNocturnas, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel15)
@@ -377,10 +429,8 @@ public class Pago_Empleados_Vista extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                             .addComponent(txtSalarioBase, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel11)))
-                    .addComponent(jLabel14)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jLabel11))))
+                .addContainerGap())
         );
 
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
@@ -453,7 +503,7 @@ public class Pago_Empleados_Vista extends javax.swing.JFrame {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGap(26, 26, 26)
                 .addComponent(btnAtras)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 184, Short.MAX_VALUE)
                 .addComponent(btnGuardar)
                 .addGap(109, 109, 109)
                 .addComponent(btnLista)
@@ -481,20 +531,20 @@ public class Pago_Empleados_Vista extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addGap(257, 257, 257)
-                            .addComponent(jLabel1))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(257, 257, 257)
+                                .addComponent(jLabel1))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGroup(jPanel1Layout.createSequentialGroup()
                             .addContainerGap()
-                            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(29, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -505,9 +555,9 @@ public class Pago_Empleados_Vista extends javax.swing.JFrame {
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(35, 35, 35)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 68, Short.MAX_VALUE)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(27, Short.MAX_VALUE))
+                .addGap(52, 52, 52))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -549,18 +599,23 @@ public class Pago_Empleados_Vista extends javax.swing.JFrame {
                     }
 
                 }
-                
+
                 float horasd = Float.parseFloat(txtHorasExtras.getText());
                 float total = horasd * ch.REtornarHoraDiurna().getValor();
-                if(txtTotalRecargos.getText().equals("0.0")){
-                      txtTotalRecargos.setText(String.valueOf(total));
-                }else{
+                if (txtTotalRecargos.getText().equals("0.0")) {
+                    txtTotalRecargos.setText(String.valueOf(total));
+                    float salario = Float.parseFloat(txtSalarioBase.getText());
+                    float totalpagar = salario + total;
+                    txtTotalPago.setText(String.valueOf(totalpagar));
+                } else {
                     float yaesta = Float.parseFloat(txtTotalRecargos.getText());
                     yaesta = yaesta + total;
                     txtTotalRecargos.setText(String.valueOf(yaesta));
+                    float salario = Float.parseFloat(txtSalarioBase.getText());
+                    float totalpagar = salario + yaesta;
+                    txtTotalPago.setText(String.valueOf(totalpagar));
                 }
-              
-                
+
             }
         } catch (java.lang.NumberFormatException ex) {
             System.err.println(ex.getMessage());
@@ -594,15 +649,22 @@ public class Pago_Empleados_Vista extends javax.swing.JFrame {
                     }
 
                     float horasd = Float.parseFloat(txtHorasNocturnas.getText());
-                float total = horasd * ch.REtornarHoraNocturna().getValor();
-                if(txtTotalRecargos.getText().equals("0.0")){
-                      txtTotalRecargos.setText(String.valueOf(total));
-                     
-                }else{
-                    float yaesta = Float.parseFloat(txtTotalRecargos.getText());
-                    yaesta = yaesta + total;
-                    txtTotalRecargos.setText(String.valueOf(yaesta));
-                }
+                    float total = horasd * ch.REtornarHoraNocturna().getValor();
+                    if (txtTotalRecargos.getText().equals("0.0")) {
+                        txtTotalRecargos.setText(String.valueOf(total));
+                        float salario = Float.parseFloat(txtSalarioBase.getText());
+                        float adicio = Float.parseFloat(txtRecargoAdicional.getText());
+                        float totalpagar = salario + total + adicio;
+                        txtTotalPago.setText(String.valueOf(totalpagar));
+                    } else {
+                        float yaesta = Float.parseFloat(txtTotalRecargos.getText());
+                        yaesta = yaesta + total;
+                        txtTotalRecargos.setText(String.valueOf(yaesta));
+                        float salario = Float.parseFloat(txtSalarioBase.getText());
+                        float adicio = Float.parseFloat(txtRecargoAdicional.getText());
+                        float totalpagar = salario + yaesta + adicio;
+                        txtTotalPago.setText(String.valueOf(totalpagar));
+                    }
                 }
             }
         } catch (java.lang.NumberFormatException ex) {
@@ -634,6 +696,15 @@ public class Pago_Empleados_Vista extends javax.swing.JFrame {
                         txtRecargoAdicional.setText(String.valueOf(num));
                     }
 
+                    if (txtTotalPago.getText().equals("0.0")) {
+                        txtTotalPago.setText(String.valueOf(txtRecargoAdicional.getText()));
+                    } else {
+                        float total = Float.parseFloat(txtTotalPago.getText());
+                        float adi = Float.parseFloat(txtRecargoAdicional.getText());
+                        float suma = total + adi;
+                        txtTotalPago.setText(String.valueOf(suma));
+                    }
+
                 }
             }
         } catch (java.lang.NumberFormatException ex) {
@@ -656,7 +727,7 @@ public class Pago_Empleados_Vista extends javax.swing.JFrame {
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         // TODO add your handling code here:
-        
+
 
     }//GEN-LAST:event_jButton7ActionPerformed
 
@@ -678,11 +749,32 @@ public class Pago_Empleados_Vista extends javax.swing.JFrame {
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         // TODO add your handling code here:
 
-     if(txtIDentificacion.getText().isEmpty()){
-         JOptionPane.showMessageDialog(null,"Debe ingresar una identificacion");
-     }else{
-         
-     }
+        if (txtIDentificacion.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Debe ingresar una identificacion");
+        } else {
+            Pago_Empleado pe = new Pago_Empleado();
+            pe.setCodigo_Pago(txtCodigPago.getText());
+            pe.setFk_Empleado(txtIDentificacion.getText());
+            pe.setFecha_Pago(txtFechaPago.getText());
+            pe.setMes_pagado(cboMesPagado.getSelectedItem().toString());
+            pe.setHoras_Extras(Integer.parseInt(txtHorasExtras.getText()));
+            pe.setHoras_Nocturnas(Integer.parseInt(txtHorasNocturnas.getText()));
+            pe.setRecargo_Adicional(Float.parseFloat(txtRecargoAdicional.getText()));
+            pe.setNotas(TxtNota.getText());
+            pe.setSueldo_base(Float.parseFloat(txtSalarioBase.getText()));
+            pe.setTotal_recargo(Float.parseFloat(txtTotalRecargos.getText()));
+            pe.setTotal_Pago(Float.parseFloat(txtTotalPago.getText()));
+            
+            if(cpe.RegistrarPagoEmpleado(pe)==1){
+                LimpiarForm();
+                JOptionPane.showMessageDialog(null,"Pago RegistradoCorrectamente");
+            }else{
+                 JOptionPane.showMessageDialog(null,"Error al registrar Pago");
+                
+            }
+            
+
+        }
 
     }//GEN-LAST:event_btnGuardarActionPerformed
 
@@ -694,7 +786,7 @@ public class Pago_Empleados_Vista extends javax.swing.JFrame {
         // TODO add your handling code here:
         Cambiar_Hora_Nocturna chn = new Cambiar_Hora_Nocturna();
         chn.setVisible(true);
-       
+
     }//GEN-LAST:event_CambiarHorasNocturnasActionPerformed
 
     private void CambiarHorasDiurnasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CambiarHorasDiurnasActionPerformed
@@ -752,7 +844,7 @@ public class Pago_Empleados_Vista extends javax.swing.JFrame {
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnLimpiar;
     private javax.swing.JButton btnLista;
-    private datechooser.beans.DateChooserCombo dateChooserCombo1;
+    private javax.swing.JComboBox<String> cboMesPagado;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton7;
     private javax.swing.JLabel jLabel1;
@@ -764,6 +856,7 @@ public class Pago_Empleados_Vista extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -782,6 +875,7 @@ public class Pago_Empleados_Vista extends javax.swing.JFrame {
     private javax.swing.JTextField txtCodigPago;
     public static javax.swing.JTextField txtCorreo;
     public static javax.swing.JTextField txtDireccion;
+    private datechooser.beans.DateChooserCombo txtFechaPago;
     private javax.swing.JTextField txtHorasExtras;
     private javax.swing.JTextField txtHorasNocturnas;
     public static javax.swing.JTextField txtIDentificacion;
