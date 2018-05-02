@@ -9,7 +9,7 @@ package aplicacionglobalfoodtrading.Modelo;
  *
  * @author Ricardo Carmona
  */
-public class Empleado_Indirecto {
+public class Empleado_Indirecto extends Empleado {
 private String tipo_id;
 private String identificacion;
 private String nombres;
@@ -22,14 +22,14 @@ private String direccion;
 private String pais;
 private String ciudad;
 private String fecha_contratacion;
-private String salario;
+private double salario;
 private String genero;
 private String imagen;
 
     public Empleado_Indirecto() {
     }
 
-    public Empleado_Indirecto(String tipo_id, String identificacion, String nombres, String apellidos, String fecha_nac, String telefono, String correo, String cargo, String direccion, String pais, String ciudad, String fecha_contratacion, String salario, String genero, String imagen) {
+    public Empleado_Indirecto(String tipo_id, String identificacion, String nombres, String apellidos, String fecha_nac, String telefono, String correo, String cargo, String direccion, String pais, String ciudad, String fecha_contratacion, double salario, String genero, String imagen) {
         this.tipo_id = tipo_id;
         this.identificacion = identificacion;
         this.nombres = nombres;
@@ -46,6 +46,15 @@ private String imagen;
         this.genero = genero;
         this.imagen = imagen;
     }
+
+    public double getSalario() {
+        return salario;
+    }
+
+    public void setSalario(double salario) {
+        this.salario = salario;
+    }
+
 
     public String getTipo_id() {
         return tipo_id;
@@ -143,13 +152,8 @@ private String imagen;
         this.fecha_contratacion = fecha_contratacion;
     }
 
-    public String getSalario() {
-        return salario;
-    }
 
-    public void setSalario(String salario) {
-        this.salario = salario;
-    }
+
 
     public String getGenero() {
         return genero;

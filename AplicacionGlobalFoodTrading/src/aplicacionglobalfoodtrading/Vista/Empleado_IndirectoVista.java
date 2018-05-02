@@ -82,7 +82,7 @@ public class Empleado_IndirectoVista extends javax.swing.JFrame {
         txtDireccion.setText(ei.getDireccion());
         txtTelefono.setText(ei.getTelefono());
         txtCargo.setText(ei.getCargo());
-        txtSalario.setText(ei.getSalario());
+        txtSalario.setText(String.valueOf(ei.getSalario()));
         txtFechaContratacion.setText(ei.getFecha_contratacion());
         txtFechaNac.setText(ei.getFecha_nac());
         cboPais.setSelectedItem(ei.getPais());
@@ -738,7 +738,7 @@ public class Empleado_IndirectoVista extends javax.swing.JFrame {
                     e.setPais(cboPais.getSelectedItem().toString());
                     e.setCiudad(cboCiudad.getSelectedItem().toString());
                     e.setFecha_contratacion(txtFechaContratacion.getText());
-                    e.setSalario(txtSalario.getText());
+                    e.setSalario(Double.parseDouble(txtSalario.getText()));
                     e.setGenero(cboGenero.getSelectedItem().toString());
                     if (lbfoto.getIcon() == null) {
                         System.err.println("No hay foto");
@@ -790,7 +790,7 @@ public class Empleado_IndirectoVista extends javax.swing.JFrame {
                     e.setPais(cboPais.getSelectedItem().toString());
                     e.setCiudad(cboCiudad.getSelectedItem().toString());
                     e.setFecha_contratacion(txtFechaContratacion.getText());
-                    e.setSalario(txtSalario.getText());
+                    e.setSalario(Double.parseDouble(txtSalario.getText()));
                     e.setGenero(cboGenero.getSelectedItem().toString());
                     // TODO add your handling code here:
                     BufferedImage img = ImageIO.read(new File(fichero.toString()));

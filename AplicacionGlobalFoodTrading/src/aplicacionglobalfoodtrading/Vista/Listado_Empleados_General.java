@@ -5,7 +5,10 @@
  */
 package aplicacionglobalfoodtrading.Vista;
 
+import aplicacionglobalfoodtrading.Controlador.Controlador_Empleado_Directo;
 import aplicacionglobalfoodtrading.Controlador.Controlador_Empleado_Indirecto;
+import aplicacionglobalfoodtrading.Modelo.Empleado;
+import aplicacionglobalfoodtrading.Modelo.Empleado_Directo;
 import aplicacionglobalfoodtrading.Modelo.Empleado_Indirecto;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
@@ -15,37 +18,64 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Ricardo Carmona
  */
-public class Lista_Empleados_Indirectos extends javax.swing.JFrame {
+public class Listado_Empleados_General extends javax.swing.JFrame {
 
-    Controlador_Empleado_Indirecto cei = new Controlador_Empleado_Indirecto();
+    Controlador_Empleado_Directo ced = new Controlador_Empleado_Directo();
     DefaultTableModel modelo = new DefaultTableModel();
+    Controlador_Empleado_Indirecto cei = new Controlador_Empleado_Indirecto();
 
-    public Lista_Empleados_Indirectos() {
+    public Listado_Empleados_General() {
         initComponents();
         CrearTabla();
-        CargarTabla();
+        CargarTablaGeneral();
+
     }
 
     public void CrearTabla() {
-        String titulos[] = {"Tipo_ID", "IDentificacion", "Nombres", "Apellidos", "Cargo", "Salario"};
+        String titulos[] = {"Tipo Empleado", "Tipo ID", "Identificacion", "Nombres", "Apellidos", "Cargo", "Salario"};
         modelo.setColumnIdentifiers(titulos);
-        TablaEmpleadosInDirectos.setModel(modelo);
+        TablaEmpleado.setModel(modelo);
     }
 
-    public void CargarTabla() {
-        ArrayList<Empleado_Indirecto> lei = new ArrayList();
-        lei = cei.ListadoEmpleadosIndirectos();
-        LimpiarTabla();
+    public void CargarTablaGeneral() {
+        ArrayList<Empleado_Directo> led = new ArrayList();
+        try {
+            LimpiarTabla();
+            led = ced.ListaEmpleadosDirectos();
+//                 for(Empleado_Directo d : led){
+//                     System.out.println("Cedula : "+d.getIdentificacion());
+//                 }
+            if (led.isEmpty()) {
+                System.out.println("Esta vacio el arraylist");
+            }
 
-        for (Empleado_Indirecto e : lei) {
-            String Datos[] = {e.getTipo_id(), e.getIdentificacion(), e.getNombres(), e.getApellidos(), e.getCargo(), String.valueOf(e.getSalario())};
+            for (Empleado e : led) {
+                String tipo = "";
+                if (e instanceof Empleado_Directo) {
+                    tipo = "Emp. Directo";
+                    String datos[] = {tipo, e.getTipoid(), e.getIdentificacion(), e.getNombre(), e.getApellido(), e.getCargo(), String.valueOf(e.getSalario())};
+                modelo.addRow(datos);
+                }
+    
+            }
+            
+            ArrayList<Empleado_Indirecto> Lei = new ArrayList();
+           Lei = cei.ListadoEmpleadosIndirectos();
+            
+             for (Empleado_Indirecto e : Lei) {
+                 String tipo = "Emp. Indirecto";
+            String Datos[] = {tipo,e.getTipo_id(), e.getIdentificacion(), e.getNombres(), e.getApellidos(), e.getCargo(), String.valueOf(e.getSalario())};
             modelo.addRow(Datos);
         }
-
+    
+            
+        } catch (java.lang.NullPointerException ex) {
+            JOptionPane.showMessageDialog(null, "Error de carga de datos en tabla " + ex.getMessage());
+        }
     }
 
     public void LimpiarTabla() {
-        int filas = TablaEmpleadosInDirectos.getRowCount();
+        int filas = TablaEmpleado.getRowCount();
         for (int i = 0; filas > i; i++) {
             modelo.removeRow(0);
         }
@@ -57,9 +87,8 @@ public class Lista_Empleados_Indirectos extends javax.swing.JFrame {
 
         jPopupMenu1 = new javax.swing.JPopupMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
         jPanel1 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        TablaEmpleadosInDirectos = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
@@ -67,8 +96,10 @@ public class Lista_Empleados_Indirectos extends javax.swing.JFrame {
         CboOpcion = new javax.swing.JComboBox<>();
         btnBuscar = new javax.swing.JButton();
         txtbuscar = new javax.swing.JTextField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        TablaEmpleado = new javax.swing.JTable();
 
-        jMenuItem1.setText("Ver Informacion Completa");
+        jMenuItem1.setText("Ver Informacion Empleado");
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem1ActionPerformed(evt);
@@ -76,30 +107,17 @@ public class Lista_Empleados_Indirectos extends javax.swing.JFrame {
         });
         jPopupMenu1.add(jMenuItem1);
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        jMenuItem2.setText("Seleccionar Empleado");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
+        jPopupMenu1.add(jMenuItem2);
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-
-        TablaEmpleadosInDirectos.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-
-            }
-        ));
-        TablaEmpleadosInDirectos.setComponentPopupMenu(jPopupMenu1);
-        TablaEmpleadosInDirectos.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                TablaEmpleadosInDirectosMouseClicked(evt);
-            }
-        });
-        TablaEmpleadosInDirectos.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                TablaEmpleadosInDirectosKeyPressed(evt);
-            }
-        });
-        jScrollPane1.setViewportView(TablaEmpleadosInDirectos);
 
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/aplicacionglobalfoodtrading/Iconos/Previous32x32.png"))); // NOI18N
         jButton1.setToolTipText("Volver a la pagina anterior");
@@ -114,7 +132,7 @@ public class Lista_Empleados_Indirectos extends javax.swing.JFrame {
         });
 
         jLabel1.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
-        jLabel1.setText("LISTADO DE EMPLEADOS DIRECTOS");
+        jLabel1.setText("LISTADO DE EMPLEADOS GENERAL");
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
         jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -184,25 +202,40 @@ public class Lista_Empleados_Indirectos extends javax.swing.JFrame {
                 .addGap(13, 13, 13))
         );
 
+        TablaEmpleado.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {},
+                {},
+                {},
+                {}
+            },
+            new String [] {
+
+            }
+        ));
+        TablaEmpleado.setComponentPopupMenu(jPopupMenu1);
+        jScrollPane1.setViewportView(TablaEmpleado);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(33, 33, 33)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap()
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(33, 33, 33)
+                                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(146, 146, 146)
+                                .addComponent(jLabel1))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(146, 146, 146)
-                        .addComponent(jLabel1)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(66, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 827, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(51, 51, 51))
+                        .addGap(55, 55, 55)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 790, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(53, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -214,32 +247,26 @@ public class Lista_Empleados_Indirectos extends javax.swing.JFrame {
                         .addComponent(jLabel1)
                         .addGap(18, 18, 18)
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 56, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 307, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(38, 38, 38))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(30, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void TablaEmpleadosInDirectosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TablaEmpleadosInDirectosMouseClicked
-
-    }//GEN-LAST:event_TablaEmpleadosInDirectosMouseClicked
-
-    private void TablaEmpleadosInDirectosKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TablaEmpleadosInDirectosKeyPressed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_TablaEmpleadosInDirectosKeyPressed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
@@ -247,16 +274,9 @@ public class Lista_Empleados_Indirectos extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        if (TablaEmpleadosInDirectos.getSelectedRow() < 0) {
-            JOptionPane.showMessageDialog(null, "Seleccione un empleado");
-        } else {
-            int f = TablaEmpleadosInDirectos.getSelectedRow();
-            int c = 1;
-            String ide = TablaEmpleadosInDirectos.getValueAt(f, c).toString();
-            Empleado_Indirecto ei = cei.RetornarEmpleadoIndirectoXCodigo(ide);
-            Empleado_IndirectoVista eiv = new Empleado_IndirectoVista(ei);
-            eiv.setVisible(true);
-        }
+        // TODO add your handling code here:
+
+
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void CboOpcionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CboOpcionActionPerformed
@@ -275,17 +295,72 @@ public class Lista_Empleados_Indirectos extends javax.swing.JFrame {
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         // TODO add your handling code here:
-        if (TablaEmpleadosInDirectos.getSelectedRow() < 0) {
-            JOptionPane.showMessageDialog(null, "Seleccione un empleado");
-        } else {
-            int f = TablaEmpleadosInDirectos.getSelectedRow();
-            int c = 1;
-            String ide = TablaEmpleadosInDirectos.getValueAt(f, c).toString();
-            Empleado_Indirecto ei = cei.RetornarEmpleadoIndirectoXCodigo(ide);
-            Empleado_IndirectoVista eiv = new Empleado_IndirectoVista(ei);
-            eiv.setVisible(true);
+        
+        if(TablaEmpleado.getSelectedRow()<0){
+           JOptionPane.showMessageDialog(null,"Debe seleccionar Un empleado");
+        }else{
+            
+            int f1 = TablaEmpleado.getSelectedRow();
+            int c1 = 0;
+            int f2 = TablaEmpleado.getSelectedRow();
+            int c2 = 2;
+            String tipo = TablaEmpleado.getValueAt(f1, c1).toString();
+            
+            if(tipo.equals("Emp. Directo")){
+                Empleado_Directo ed = null;
+                ed  = ced.Empleadoxid(TablaEmpleado.getValueAt(f2, c2).toString());
+                Registro_Empleados_Directos red = new Registro_Empleados_Directos(ed);
+                red.setVisible(true);
+            }else{
+                Empleado_Indirecto ei = null;
+                ei = cei.RetornarEmpleadoIndirectoXCodigo(TablaEmpleado.getValueAt(f2, c2).toString());
+                Empleado_IndirectoVista eiv = new Empleado_IndirectoVista(ei);
+                eiv.setVisible(true);
+            }
+         
         }
+        
+        
     }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        // TODO add your handling code here:
+        if(TablaEmpleado.getSelectedRow()<0){
+           JOptionPane.showMessageDialog(null,"Debe seleccionar Un empleado");
+        }else{
+            
+            int f1 = TablaEmpleado.getSelectedRow();
+            int c1 = 0;
+            int f2 = TablaEmpleado.getSelectedRow();
+            int c2 = 2;
+            String tipo = TablaEmpleado.getValueAt(f1, c1).toString();
+            
+            if(tipo.equals("Emp. Directo")){
+                Empleado_Directo ed = null;
+                ed  = ced.Empleadoxid(TablaEmpleado.getValueAt(f2, c2).toString());
+                Pago_Empleados_Vista.txTNombres.setText(ed.getNombre());
+                Pago_Empleados_Vista.txtApellidos.setText(ed.getApellido());
+                Pago_Empleados_Vista.txtCorreo.setText(ed.getEmail());
+                Pago_Empleados_Vista.txtTelefono.setText(ed.getTel_movil());
+                Pago_Empleados_Vista.txtDireccion.setText(ed.getDireccion());
+                Pago_Empleados_Vista.txtIDentificacion.setText(ed.getIdentificacion());
+                Pago_Empleados_Vista.txtSalarioBase.setText(String.valueOf(ed.getSalario()));
+                Pago_Empleados_Vista.txtTipoId.setText(ed.getTipoid());
+            }else{
+                Empleado_Indirecto ei = null;
+                ei = cei.RetornarEmpleadoIndirectoXCodigo(TablaEmpleado.getValueAt(f2, c2).toString());
+                Pago_Empleados_Vista.txTNombres.setText(ei.getNombres());
+                Pago_Empleados_Vista.txtApellidos.setText(ei.getApellidos());
+                Pago_Empleados_Vista.txtCorreo.setText(ei.getCorreo());
+                Pago_Empleados_Vista.txtTelefono.setText(ei.getTelefono());
+                Pago_Empleados_Vista.txtDireccion.setText(ei.getDireccion());
+                Pago_Empleados_Vista.txtIDentificacion.setText(ei.getIdentificacion());
+                Pago_Empleados_Vista.txtSalarioBase.setText(String.valueOf(ei.getSalario()));
+                Pago_Empleados_Vista.txtTipoId.setText(ei.getTipo_id());
+            }
+         
+        }
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -301,35 +376,44 @@ public class Lista_Empleados_Indirectos extends javax.swing.JFrame {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
+
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Lista_Empleados_Indirectos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Listado_Empleados_General.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Lista_Empleados_Indirectos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Listado_Empleados_General.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Lista_Empleados_Indirectos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Listado_Empleados_General.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Lista_Empleados_Indirectos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Listado_Empleados_General.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Lista_Empleados_Indirectos().setVisible(true);
+                new Listado_Empleados_General().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> CboOpcion;
-    private javax.swing.JTable TablaEmpleadosInDirectos;
+    private javax.swing.JTable TablaEmpleado;
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPopupMenu jPopupMenu1;

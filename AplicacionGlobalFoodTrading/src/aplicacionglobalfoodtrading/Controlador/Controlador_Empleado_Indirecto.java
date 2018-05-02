@@ -67,7 +67,7 @@ public class Controlador_Empleado_Indirecto {
         int exi = 0;
         String sql2 = "INSERT INTO `Empleado_Indirecto`(`tipo_id`, `identificacion`, `nombres`, `apellidos`, `fecha_nac`, `telefono`, `correo`, `cargo`, `direccion`, `pais`, `ciudad`, `fecha_contratacion`, `salario`, `genero`, `imagen`) VALUES ('" + ei.getTipo_id() + "','" + ei.getIdentificacion() + "','" + ei.getNombres() + "','" + ei.getApellidos() + "','" + ei.getFecha_nac() + "','" + ei.getTelefono() + "','" + ei.getCorreo() + "','" + ei.getCargo() + "','" + ei.getDireccion() + "','" + ei.getPais() + "','" + ei.getCiudad() + "','" + ei.getFecha_contratacion() + "','" + ei.getSalario() + "','" + ei.getGenero() + "','" + "null" + "')";
 
-        String sql = "INSERT INTO `Empleado_Indirecto`(`tipo_id`, `identificacion`, `nombres`, `apellidos`, `fecha_nac`, `telefono`, `correo`, `cargo`, `direccion`, `pais`, `ciudad`, `fecha_contratacion`, `salario`, `genero`, `imagen`) VALUES ('" + ei.getTipo_id() + "','" + ei.getIdentificacion() + "','" + ei.getNombres() + "','" + ei.getApellidos() + "','" + ei.getFecha_nac() + "','" + ei.getTelefono() + "','" + ei.getCorreo() + "','" + ei.getCargo() + "','" + ei.getDireccion() + "','" + ei.getPais() + "','" + ei.getCiudad() + "','" + ei.getFecha_contratacion() + "','" + ei.getSalario() + "','" + ei.getGenero() + "','" + ei.getImagen() + "')";
+        String sql = "INSERT INTO `Empleado_Indirecto`(`tipo_id`, `identificacion`, `nombres`, `apellidos`, `fecha_nac`, `telefono`, `correo`, `cargo`, `direccion`, `pais`, `ciudad`, `fecha_contratacion`, `salario`, `genero`, `imagen`) VALUES ('" + ei.getTipo_id() + "','" + ei.getIdentificacion() + "','" + ei.getNombres() + "','" + ei.getApellidos() + "','" + ei.getFecha_nac() + "','" + ei.getTelefono() + "','" + ei.getCorreo() + "','" + ei.getCargo() + "','" + ei.getDireccion() + "','" + ei.getPais() + "','" + ei.getCiudad() + "','" + ei.getFecha_contratacion() + "'," + ei.getSalario() + ",'" + ei.getGenero() + "','" + ei.getImagen() + "')";
         try {
             Conectar();
             //System.out.println(sql);
@@ -111,7 +111,7 @@ public class Controlador_Empleado_Indirecto {
                 ei.setPais(rs.getString(10));
                 ei.setCiudad(rs.getString(11));
                 ei.setFecha_contratacion(rs.getString(12));
-                ei.setSalario(rs.getString(13));
+                ei.setSalario(rs.getDouble(13));
                 ei.setGenero(rs.getString(14));
                 ei.setImagen(rs.getString(15));
                 listaei.add(ei);
