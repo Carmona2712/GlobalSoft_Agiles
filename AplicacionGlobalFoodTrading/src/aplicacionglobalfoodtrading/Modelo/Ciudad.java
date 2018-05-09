@@ -14,6 +14,15 @@ public class Ciudad {
     public Ciudad() {
     }
 
+    public Ciudad(String idciudad) {
+        this.idciudad = idciudad;
+    }
+
+    
+    
+    
+    
+    
     public Ciudad(String idciudad, String ciudad, String fk_pais) {
         this.idciudad = idciudad;
         this.ciudad = ciudad;
