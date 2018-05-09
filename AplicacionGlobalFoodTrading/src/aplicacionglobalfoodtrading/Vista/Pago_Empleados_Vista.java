@@ -732,8 +732,7 @@ public class Pago_Empleados_Vista extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void btnListaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListaActionPerformed
-        Listado_Clientes lc = new Listado_Clientes();
-        lc.setVisible(true);
+        
     }//GEN-LAST:event_btnListaActionPerformed
 
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed

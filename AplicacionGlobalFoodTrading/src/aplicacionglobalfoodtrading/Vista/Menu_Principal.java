@@ -208,10 +208,22 @@ public class Menu_Principal extends javax.swing.JFrame {
         jMenu14.setIcon(new javax.swing.ImageIcon(getClass().getResource("/aplicacionglobalfoodtrading/Iconos/Cliente_Menu_24x24.png"))); // NOI18N
         jMenu14.setText("Gestionar Clientes");
 
+        jMenuItem15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/aplicacionglobalfoodtrading/Iconos/Add_Menu_Item.png"))); // NOI18N
         jMenuItem15.setText("Registrar Cliente");
+        jMenuItem15.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem15ActionPerformed(evt);
+            }
+        });
         jMenu14.add(jMenuItem15);
 
+        jMenuItem16.setIcon(new javax.swing.ImageIcon(getClass().getResource("/aplicacionglobalfoodtrading/Iconos/List_Premium_Menu_Item.png"))); // NOI18N
         jMenuItem16.setText("Listado de Clientes");
+        jMenuItem16.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem16ActionPerformed(evt);
+            }
+        });
         jMenu14.add(jMenuItem16);
 
         jMenuBar1.add(jMenu14);
@@ -221,10 +233,17 @@ public class Menu_Principal extends javax.swing.JFrame {
         jMenu8.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
 
         jMenuItem9.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jMenuItem9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/aplicacionglobalfoodtrading/Iconos/Add_Menu_Item.png"))); // NOI18N
         jMenuItem9.setText("Crear Pago");
+        jMenuItem9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem9ActionPerformed(evt);
+            }
+        });
         jMenu8.add(jMenuItem9);
 
         jMenuItem10.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jMenuItem10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/aplicacionglobalfoodtrading/Iconos/List_Premium_Menu_Item.png"))); // NOI18N
         jMenuItem10.setText("Historial de pagos");
         jMenuItem10.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -373,6 +392,24 @@ public class Menu_Principal extends javax.swing.JFrame {
         Info_Empresa_Vista iev = new Info_Empresa_Vista();
         iev.setVisible(true);
     }//GEN-LAST:event_jMenuItem14ActionPerformed
+
+    private void jMenuItem15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem15ActionPerformed
+        // TODO add your handling code here:
+        Cliente_Vista cv = new Cliente_Vista();
+        cv.setVisible(true);
+    }//GEN-LAST:event_jMenuItem15ActionPerformed
+
+    private void jMenuItem16ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem16ActionPerformed
+        // TODO add your handling code here:
+        Listado_Clientes lc = new Listado_Clientes();
+        lc.setVisible(true);
+    }//GEN-LAST:event_jMenuItem16ActionPerformed
+
+    private void jMenuItem9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem9ActionPerformed
+        // TODO add your handling code here:
+        Pago_Empleados_Vista pev = new Pago_Empleados_Vista();
+        pev.setVisible(true);
+    }//GEN-LAST:event_jMenuItem9ActionPerformed
 
     /**
      * @param args the command line arguments
