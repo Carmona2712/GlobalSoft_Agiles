@@ -128,4 +128,20 @@ public class Controlador_Pago_Empleado {
     }
     
   
+    
+   public ArrayList<Pago_Empleado> Pagos_X_identificacion(String id){
+       
+     ArrayList<Pago_Empleado> lista = new ArrayList();
+     
+     
+     for(Pago_Empleado p : this.ListadoPagoEmpleados()){
+         if(p.getFk_Empleado().equals(id)){
+             lista.add(p);
+         }
+     }
+     
+    return lista;
+}
+
+
 }
