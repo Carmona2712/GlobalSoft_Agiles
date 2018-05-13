@@ -133,7 +133,6 @@ public class Controlador_Pago_Empleado {
        
      ArrayList<Pago_Empleado> lista = new ArrayList();
      
-     
      for(Pago_Empleado p : this.ListadoPagoEmpleados()){
          if(p.getFk_Empleado().equals(id)){
              lista.add(p);
@@ -142,6 +141,39 @@ public class Controlador_Pago_Empleado {
      
     return lista;
 }
-
+   
+   
+   
+   public ArrayList<Pago_Empleado> ListadoPagoEmpleadosEntreFechas(String fechai,String fechaf) {
+        ArrayList<Pago_Empleado> ListaPE = new ArrayList();
+        try {
+            Conectar();
+            String sql = "Select * from `pago_empleado` where fecha_pago between '"+fechai+"' and '"+fechaf+"' order by fecha_pago";
+            System.out.println(sql);
+            st = con.createStatement();
+            rs = st.executeQuery(sql);
+            while (rs.next()) {
+               Pago_Empleado pe = new Pago_Empleado();
+               pe.setCodigo_Pago(rs.getString(1));
+               pe.setFk_Empleado(rs.getString(2));
+               pe.setFecha_Pago(rs.getString(3));
+               pe.setMes_pagado(rs.getString(4));
+               pe.setHoras_Extras(rs.getInt(5));
+               pe.setHoras_Nocturnas(rs.getInt(6));
+               pe.setRecargo_Adicional(rs.getFloat(7));
+               pe.setNotas(rs.getString(8));
+               pe.setSueldo_base(rs.getFloat(9));
+               pe.setTotal_recargo(rs.getFloat(10));
+               pe.setTotal_Pago(rs.getFloat(11));
+                ListaPE.add(pe);
+            }
+            
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage() + " en el Controlador Pago Empleado", "Error", JOptionPane.ERROR_MESSAGE);
+            // System.out.println(sql);
+        }
+        return ListaPE;
+    }
+   
 
 }

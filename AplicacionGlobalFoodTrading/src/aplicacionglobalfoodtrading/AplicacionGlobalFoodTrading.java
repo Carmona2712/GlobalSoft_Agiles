@@ -5,6 +5,8 @@
  */
 package aplicacionglobalfoodtrading;
 
+import aplicacionglobalfoodtrading.Vista.Login;
+
 /**
  *
  * @author Ricardo Carmona
@@ -16,6 +18,8 @@ public class AplicacionGlobalFoodTrading {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        Login l = new Login();
+        l.setVisible(true);
     }
     
 }
