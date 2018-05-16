@@ -1,11 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package aplicacionglobalfoodtrading.Controlador;
 
-import aplicacionglobalfoodtrading.Modelo.Cliente;
+import aplicacionglobalfoodtrading.Modelo.Detalle_Pedido;
 import aplicacionglobalfoodtrading.Modelo.Pedido;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -14,11 +9,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import javax.swing.JOptionPane;
 
-/**
- *
- * @author Ricardo Carmona
- */
-public class Controlador_Pedido {
+public class Controlador_Detalle_Pedido {
 
     private static Connection con;
     private static ResultSet rs;
@@ -48,9 +39,9 @@ public class Controlador_Pedido {
         st = aSt;
     }
 
-    public Controlador_Pedido() {
+    public Controlador_Detalle_Pedido() {
     }
-
+    
     public void Conectar() {
 
         try {
@@ -60,10 +51,11 @@ public class Controlador_Pedido {
             JOptionPane.showMessageDialog(null, "Error al conectar BD");
         }
     }
-
-    public int RegistrarPedido(Pedido p) {
+    
+    
+     public int RegistrarDetalle_Pedido(Detalle_Pedido d) {
         int exi = 0;
-        String sql = "INSERT INTO `pedido`(`id_pedido`, `fecha_pedido`, `id_cliente`, `total_iva`, `total_valor`) VALUES ('"+p.getId_pedido()+"','"+p.getFecha()+"','"+p.getId_cliente()+"',"+p.getTotal_iva()+","+p.getTotal_pedido()+")";
+        String sql = "INSERT INTO `detalle_pedido`(`fk_id_pedido`, `id_producto`, `cantidad`, `precio`, `iva`, `valor_total`) VALUES ('"+d.getFk_codigo_pedido()+"','"+d.getId_producto()+"',"+d.getCantidad()+","+d.getValor_producto()+","+d.getIva()+","+d.getValortotal()+")";
         try {
             Conectar();
             //System.out.println(sql);
@@ -77,7 +69,7 @@ public class Controlador_Pedido {
             }
 
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, ex.getMessage() + " en el Controlador Pedido", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, ex.getMessage() + " en el Controlador Detalle_Pedido", "Error", JOptionPane.ERROR_MESSAGE);
             // System.out.println(sql);
             exi = 0;
         }
@@ -85,5 +77,7 @@ public class Controlador_Pedido {
         return exi;
 
     }
-
+    
+    
+    
 }
