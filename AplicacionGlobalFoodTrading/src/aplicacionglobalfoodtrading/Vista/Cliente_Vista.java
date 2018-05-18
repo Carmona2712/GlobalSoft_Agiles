@@ -515,7 +515,7 @@ public class Cliente_Vista extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void btnListaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListaActionPerformed
-        Listado_Clientes lc = new Listado_Clientes();
+        Listado_Clientes_1_Vista lc = new Listado_Clientes_1_Vista();
         lc.setVisible(true);
     }//GEN-LAST:event_btnListaActionPerformed
 

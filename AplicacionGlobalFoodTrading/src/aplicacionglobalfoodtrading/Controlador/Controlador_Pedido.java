@@ -6,12 +6,14 @@
 package aplicacionglobalfoodtrading.Controlador;
 
 import aplicacionglobalfoodtrading.Modelo.Cliente;
+import aplicacionglobalfoodtrading.Modelo.Giro_Negocio;
 import aplicacionglobalfoodtrading.Modelo.Pedido;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 /**
@@ -85,5 +87,51 @@ public class Controlador_Pedido {
         return exi;
 
     }
+    
+    
+    
+    public ArrayList<Pedido> ListadoPedidos(){
+        ArrayList<Pedido> Listap = new ArrayList();
+        Controlador_Detalle_Pedido cd = new Controlador_Detalle_Pedido();
+         try {
+            Conectar();
+            String sql = "Select * from pedido order by fecha_pedido";
+            st = con.createStatement();
+            rs = st.executeQuery(sql);
+            while (rs.next()) {
+               Pedido p = new Pedido();
+                p.setId_pedido(rs.getString(1));
+                p.setFecha(rs.getString(2));
+                p.setId_cliente(rs.getString(3));
+                p.setTotal_iva(rs.getFloat(4));
+                p.setTotal_pedido(rs.getFloat(5));
+                p.setLista_Detalles(cd.ListadoDetallePedidos(p.getId_pedido()));
+                Listap.add(p);
+            }
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage() + " en el Controlador _ de Giro Negocio", "Error", JOptionPane.ERROR_MESSAGE);
+            // System.out.println(sql);
+        }
+        return Listap;
+    }
+    
+    
+    
+    
+    public Pedido BuscarPedidoxCod(String cod){
+        
+        Pedido p = null;
+        
+        
+       for(Pedido pe : this.ListadoPedidos()){
+            if(pe.getId_pedido().equals(cod)){
+                p = pe;
+            }
+       }
+        
+     return p;   
+    }
+    
 
 }

@@ -16,11 +16,11 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Ricardo Carmona
  */
-public class Listado_Clientes extends javax.swing.JFrame {
+public class Listado_Clientes_Pedido extends javax.swing.JFrame {
 
     ControladorCliente ccl = new ControladorCliente();
     DefaultTableModel modelo = new DefaultTableModel();
-    public Listado_Clientes() {
+    public Listado_Clientes_Pedido() {
         initComponents();
         CrearTabla();
         CargarTablaGeneral();
@@ -340,10 +340,6 @@ public class Listado_Clientes extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(Listado_Clientes.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>

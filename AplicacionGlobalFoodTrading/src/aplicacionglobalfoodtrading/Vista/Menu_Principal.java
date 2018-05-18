@@ -401,7 +401,7 @@ public class Menu_Principal extends javax.swing.JFrame {
 
     private void jMenuItem16ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem16ActionPerformed
         // TODO add your handling code here:
-        Listado_Clientes lc = new Listado_Clientes();
+        Listado_Clientes_1_Vista lc = new Listado_Clientes_1_Vista();
         lc.setVisible(true);
     }//GEN-LAST:event_jMenuItem16ActionPerformed
 

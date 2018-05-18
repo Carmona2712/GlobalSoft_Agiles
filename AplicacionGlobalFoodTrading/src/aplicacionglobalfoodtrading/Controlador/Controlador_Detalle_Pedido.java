@@ -7,6 +7,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 public class Controlador_Detalle_Pedido {
@@ -41,7 +42,7 @@ public class Controlador_Detalle_Pedido {
 
     public Controlador_Detalle_Pedido() {
     }
-    
+
     public void Conectar() {
 
         try {
@@ -51,11 +52,10 @@ public class Controlador_Detalle_Pedido {
             JOptionPane.showMessageDialog(null, "Error al conectar BD");
         }
     }
-    
-    
-     public int RegistrarDetalle_Pedido(Detalle_Pedido d) {
+
+    public int RegistrarDetalle_Pedido(Detalle_Pedido d) {
         int exi = 0;
-        String sql = "INSERT INTO `detalle_pedido`(`fk_id_pedido`, `id_producto`, `cantidad`, `precio`, `iva`, `valor_total`) VALUES ('"+d.getFk_codigo_pedido()+"','"+d.getId_producto()+"',"+d.getCantidad()+","+d.getValor_producto()+","+d.getIva()+","+d.getValortotal()+")";
+        String sql = "INSERT INTO `detalle_pedido`(`fk_id_pedido`, `id_producto`, `cantidad`, `precio`, `iva`, `valor_total`) VALUES ('" + d.getFk_codigo_pedido() + "','" + d.getId_producto() + "'," + d.getCantidad() + "," + d.getValor_producto() + "," + d.getIva() + "," + d.getValortotal() + ")";
         try {
             Conectar();
             //System.out.println(sql);
@@ -77,7 +77,32 @@ public class Controlador_Detalle_Pedido {
         return exi;
 
     }
-    
-    
-    
+
+    public ArrayList<Detalle_Pedido> ListadoDetallePedidos(String cod) {
+        ArrayList<Detalle_Pedido> ListaD = new ArrayList();
+
+        try {
+            Conectar();
+            String sql = "Select * from detalle_pedido where fk_id_pedido = '" + cod + "'";
+            st = con.createStatement();
+            rs = st.executeQuery(sql);
+            while (rs.next()) {
+                Detalle_Pedido d = new Detalle_Pedido();
+                d.setFk_codigo_pedido(rs.getString(1));
+                d.setId_producto(rs.getString(2));
+                d.setCantidad(rs.getInt(3));
+                d.setValor_producto(rs.getFloat(4));
+                d.setIva(rs.getFloat(5));
+                d.setValortotal(rs.getFloat(6));
+                ListaD.add(d);
+            }
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage() + " en el Controlador _ de Giro Negocio", "Error", JOptionPane.ERROR_MESSAGE);
+            // System.out.println(sql);
+        }
+
+        return ListaD;
+    }
+
 }
