@@ -308,8 +308,10 @@ public class Listado_Clientes_Pedido extends javax.swing.JFrame {
             
             Cliente clien = ccl.ClientexID(id);
             
-            Cliente_Vista cv = new Cliente_Vista(clien);
-            cv.setVisible(true);
+            Gestion_Pedidos.txtApellidos.setText(clien.getApellido());
+            Gestion_Pedidos.txtIdCliente.setText(clien.getIdentificacion());
+            Gestion_Pedidos.txtTipoId.setText(clien.getTipoid());
+            Gestion_Pedidos.txtNombres.setText(clien.getNombre());
         }
         
         

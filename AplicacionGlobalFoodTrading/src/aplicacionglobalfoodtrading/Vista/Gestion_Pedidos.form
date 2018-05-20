@@ -108,7 +108,7 @@
                   </Group>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="jScrollPane1" min="-2" pref="260" max="-2" attributes="0"/>
-                  <EmptySpace pref="31" max="32767" attributes="0"/>
+                  <EmptySpace pref="27" max="32767" attributes="0"/>
                   <Component id="jPanel3" min="-2" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
               </Group>
@@ -257,7 +257,9 @@
             </Property>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-                <TitledBorder title="Informaci&#xf3;n de Pedido"/>
+                <TitledBorder title="Informaci&#xf3;n de Pedido">
+                  <Font PropertyName="font" name="Tahoma" size="16" style="0"/>
+                </TitledBorder>
               </Border>
             </Property>
           </Properties>
@@ -273,7 +275,7 @@
                       </Group>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="txtCodigoPago" min="-2" pref="200" max="-2" attributes="0"/>
+                          <Component id="txtCodigoPedido" min="-2" pref="200" max="-2" attributes="0"/>
                           <Component id="txtTipoId" min="-2" pref="193" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
@@ -311,7 +313,7 @@
                           <Component id="jLabel1" alignment="2" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabel2" alignment="2" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabel3" alignment="2" min="-2" max="-2" attributes="0"/>
-                          <Component id="txtCodigoPago" alignment="2" min="-2" pref="25" max="-2" attributes="0"/>
+                          <Component id="txtCodigoPedido" alignment="2" min="-2" pref="25" max="-2" attributes="0"/>
                           <Component id="txtIdCliente" alignment="2" min="-2" pref="25" max="-2" attributes="0"/>
                           <Component id="jButton9" alignment="2" min="-2" pref="25" max="-2" attributes="0"/>
                       </Group>
@@ -356,7 +358,7 @@
             </Component>
             <Component class="datechooser.beans.DateChooserCombo" name="txtFechaPedido">
             </Component>
-            <Component class="javax.swing.JTextField" name="txtCodigoPago">
+            <Component class="javax.swing.JTextField" name="txtCodigoPedido">
               <Properties>
                 <Property name="editable" type="boolean" value="false"/>
               </Properties>

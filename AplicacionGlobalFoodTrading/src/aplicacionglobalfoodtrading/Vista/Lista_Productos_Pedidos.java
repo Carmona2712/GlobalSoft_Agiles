@@ -5,6 +5,7 @@
  */
 package aplicacionglobalfoodtrading.Vista;
 
+import aplicacionglobalfoodtrading.Controlador.ControladorImpuesto;
 import aplicacionglobalfoodtrading.Controlador.ControladorProducto;
 import aplicacionglobalfoodtrading.Controlador.ControladorProveedor;
 import aplicacionglobalfoodtrading.Modelo.Empleado_Directo;
@@ -18,19 +19,21 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Ricardo Andres
  */
-public class Lista_Productos extends javax.swing.JFrame {
+public class Lista_Productos_Pedidos extends javax.swing.JFrame {
 
     DefaultTableModel modelo = new DefaultTableModel();
     ControladorProducto cp = new ControladorProducto();
     ControladorProveedor cprov = new ControladorProveedor();
-    public Lista_Productos() {
+    ControladorImpuesto ci = new ControladorImpuesto();
+
+    public Lista_Productos_Pedidos() {
         initComponents();
         CrearTabla();
         CargarTablaGeneral();
     }
 
-   public void CrearTabla() {
-        String titulos[] = {"Codigo", "Nombre", "Proveedor","Precio de Costo", "Precio Venta", "Utilidad", "Tipo Producto", "Precio Neto", "Precio + Impuesto"};
+    public void CrearTabla() {
+        String titulos[] = {"Codigo", "Nombre", "Proveedor", "Precio de Costo", "Precio Venta", "Utilidad", "Tipo Producto", "Precio Neto", "Precio + Impuesto"};
         modelo.setColumnIdentifiers(titulos);
         TablaProductos.setModel(modelo);
     }
@@ -44,25 +47,24 @@ public class Lista_Productos extends javax.swing.JFrame {
 //                 for(Empleado_Directo d : led){
 //                     System.out.println("Cedula : "+d.getIdentificacion());
 //                 }
-
             for (Producto p : lp) {
                 Proveedor pr = cprov.ProvedorxCodigo(p.getFk_proveedor());
                 System.err.println(pr.getNombre());
-                String datos[] = {p.getCod_prod(), p.getNombre_prod(), pr.getNombre(), String.valueOf(p.getPrec_cost_prod()) ,String.valueOf(p.getPrec_vent_prod()), String.valueOf(p.getUtilidad_prod()), p.getTipo_prod(), String.valueOf(p.getPrecio_neto_prod()),String.valueOf(p.getPrecio_mas_impuesto())};
+                String datos[] = {p.getCod_prod(), p.getNombre_prod(), pr.getNombre(), String.valueOf(p.getPrec_cost_prod()), String.valueOf(p.getPrec_vent_prod()), String.valueOf(p.getUtilidad_prod()), p.getTipo_prod(), String.valueOf(p.getPrecio_neto_prod()), String.valueOf(p.getPrecio_mas_impuesto())};
                 modelo.addRow(datos);
             }
         } catch (java.lang.NullPointerException ex) {
             JOptionPane.showMessageDialog(null, "Error de carga de datos en tabla " + ex.getMessage());
         }
     }
-    
-    
+
     public void LimpiarTabla() {
         int filas = TablaProductos.getRowCount();
         for (int i = 0; filas > i; i++) {
             modelo.removeRow(0);
         }
     }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -80,7 +82,7 @@ public class Lista_Productos extends javax.swing.JFrame {
         btnBuscar = new javax.swing.JButton();
         txtbuscar = new javax.swing.JTextField();
 
-        jMenuItem1.setText("Ver Informacion Completa");
+        jMenuItem1.setText("Seleccionar Producto");
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem1ActionPerformed(evt);
@@ -132,7 +134,7 @@ public class Lista_Productos extends javax.swing.JFrame {
         jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/aplicacionglobalfoodtrading/Iconos/Informacion_Adcional_48x48.png"))); // NOI18N
-        jButton2.setToolTipText("Informacion mas detallada");
+        jButton2.setToolTipText("Seleccionar Producto");
         jButton2.setBorderPainted(false);
         jButton2.setContentAreaFilled(false);
         jButton2.setFocusPainted(false);
@@ -260,19 +262,16 @@ public class Lista_Productos extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-//        Empleado_Directo ed = new Empleado_Directo();
-//        int f;
-//        int c = 1;
-//        if (TablaProductos.getSelectedRow() < 0) {
-//            JOptionPane.showMessageDialog(null, "Debe seleccionar una fila con registro valido");
-//        } else {
-//            f = TablaProductos.getSelectedRow();
-//            String id = String.valueOf(TablaProductos.getValueAt(f, c));
-//            ed = ced.Empleadoxid(id);
-//            Registro_Empleados_Directos re = new Registro_Empleados_Directos(ed);
-//            re.setVisible(true);
-       // }
+        if (TablaProductos.getSelectedRow() < 0) {
+            JOptionPane.showMessageDialog(null, "Debe seleccionar un producto");
+        } else {
+            int f = TablaProductos.getSelectedRow();
+            int c = 0;
+            String codigo = TablaProductos.getValueAt(f, c).toString();
+            Producto p = cp.RetornarProductoxCod(codigo);
+            float vi = ci.RetornarImpuestoxCod(p.getFk_impuesto1()).getValor();
+            Gestion_Pedidos.AgregarProducto(p,vi);
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void CboOpcionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CboOpcionActionPerformed
@@ -303,18 +302,48 @@ public class Lista_Productos extends javax.swing.JFrame {
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         // TODO add your handling code here:
-        if(TablaProductos.getSelectedRow()<0){
-            JOptionPane.showMessageDialog(null,"Debe seleccionar un producto");
-        }else{
+        if (TablaProductos.getSelectedRow() < 0) {
+            JOptionPane.showMessageDialog(null, "Debe seleccionar un producto");
+        } else {
             int f = TablaProductos.getSelectedRow();
             int c = 0;
-            
+            int cant = -1;
             String codigo = TablaProductos.getValueAt(f, c).toString();
             Producto p = cp.RetornarProductoxCod(codigo);
-            RegistroProductos rp = new RegistroProductos(p);
-            rp.setVisible(true);
+            do {
+
+                try {
+                    cant = Integer.parseInt(JOptionPane.showInputDialog(null, "Ingrese la cantidad de productos"));
+                } catch (java.lang.NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(null, "Debe ser un valor numerico o un valor positivo ( # > 0)");
+                    cant = -1;
+                }
+
+            } while (cant <= 0);
+            float valortotalpedido = p.getPrecio_mas_impuesto() * cant;
+            float totalivaxprod = (ci.RetornarImpuestoxCod(p.getFk_impuesto1()).getValor() * p.getPrecio_neto_prod() / 100) * cant;
+            System.err.println(cant);
+            System.err.println(ci.RetornarImpuestoxCod(p.getFk_impuesto1()).getValor());
+            System.err.println(valortotalpedido);
+            String datos_producto[] = {p.getCod_prod(), p.getNombre_prod(), String.valueOf(cant), String.valueOf(p.getPrecio_neto_prod()), String.valueOf(ci.RetornarImpuestoxCod(p.getFk_impuesto1()).getValor()),String.valueOf(totalivaxprod), String.valueOf(valortotalpedido)};
+            Gestion_Pedidos.modelo_Pedido.addRow(datos_producto);
+            
+            int filap = Gestion_Pedidos.tabla_Pedido.getRowCount();
+            
+            float totaliva = 0;
+            float totalpago = 0;
+            System.err.println("numero de filas = "+filap);
+            
+            for(int i=0;i<filap;i++){
+                totaliva = totaliva + Float.parseFloat(Gestion_Pedidos.modelo_Pedido.getValueAt(i,5).toString());
+                totalpago = totalpago + Float.parseFloat(Gestion_Pedidos.modelo_Pedido.getValueAt(i,6).toString());
+            }
+            
+            Gestion_Pedidos.lblTotalIva.setText(String.valueOf(totaliva));
+            Gestion_Pedidos.lblTotalPagar.setText(String.valueOf(totalpago));
+            
         }
-        
+
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     /**
@@ -334,20 +363,23 @@ public class Lista_Productos extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Lista_Productos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Lista_Productos_Pedidos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Lista_Productos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Lista_Productos_Pedidos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Lista_Productos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Lista_Productos_Pedidos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Lista_Productos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Lista_Productos_Pedidos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Lista_Productos().setVisible(true);
+                new Lista_Productos_Pedidos().setVisible(true);
             }
         });
     }

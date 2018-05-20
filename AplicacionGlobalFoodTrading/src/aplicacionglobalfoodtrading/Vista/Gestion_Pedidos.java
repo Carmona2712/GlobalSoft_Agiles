@@ -1,8 +1,11 @@
 package aplicacionglobalfoodtrading.Vista;
 
+import aplicacionglobalfoodtrading.Controlador.ControladorCliente;
 import aplicacionglobalfoodtrading.Controlador.ControladorImpuesto;
+import aplicacionglobalfoodtrading.Controlador.ControladorProducto;
 import aplicacionglobalfoodtrading.Controlador.Controlador_Detalle_Pedido;
 import aplicacionglobalfoodtrading.Controlador.Controlador_Pedido;
+import aplicacionglobalfoodtrading.Modelo.Cliente;
 import aplicacionglobalfoodtrading.Modelo.Detalle_Pedido;
 import aplicacionglobalfoodtrading.Modelo.Pedido;
 import aplicacionglobalfoodtrading.Modelo.Producto;
@@ -19,12 +22,61 @@ public class Gestion_Pedidos extends javax.swing.JFrame {
     Controlador_Detalle_Pedido cdp = new Controlador_Detalle_Pedido();
     Controlador_Pedido cp = new Controlador_Pedido();
     ControladorImpuesto ci = new ControladorImpuesto();
+    ControladorProducto conpr = new ControladorProducto();
     public static DefaultTableModel modelo_Pedido = new DefaultTableModel();
+    ControladorCliente cc = new ControladorCliente();
 
     public Gestion_Pedidos() {
         initComponents();
         CreatTablaPedido();
-        txtCodigoPago.setText(GenerarCodigo());
+        txtCodigoPedido.setText(GenerarCodigo());
+    }
+
+    public Gestion_Pedidos(Pedido p) {
+        initComponents();
+        CreatTablaPedido();
+        txtCodigoPedido.setText(GenerarCodigo());
+        btnGuardar.setEnabled(false);
+        btnLista.setEnabled(false);
+        CargarForm(p);
+    }
+    
+    
+    public void LimpiarForm(){
+         txtCodigoPedido.setText(GenerarCodigo());
+        txtFechaPedido.setText("");
+        txtIdCliente.setText("");
+        txtNombres.setText("");
+        txtApellidos.setText("");
+        txtTipoId.setText("");
+        LimpiarTabla();
+        lblTotalIva.setText("0");
+        lblTotalPagar.setText("0");
+        
+    }
+
+    public void CargarForm(Pedido p) {
+        txtCodigoPedido.setText(p.getId_pedido());
+        txtFechaPedido.setText(p.getFecha());
+        txtIdCliente.setText(p.getId_cliente());
+        Cliente c = cc.ClientexID(p.getId_cliente());
+        txtNombres.setText(c.getNombre());
+        txtApellidos.setText(c.getApellido());
+        txtTipoId.setText(c.getTipoid());
+        CargarTablaDetalle(p.getLista_Detalles());
+        lblTotalIva.setText(String.valueOf(p.getTotal_iva()));
+        lblTotalPagar.setText(String.valueOf(p.getTotal_pedido()));
+    }
+    
+    
+    public void CargarTablaDetalle(ArrayList<Detalle_Pedido> ld){
+        LimpiarTabla();
+        
+        for(Detalle_Pedido dp : ld){
+            Producto p = conpr.RetornarProductoxCod(dp.getId_producto());
+            String datos[] = {dp.getId_producto(),p.getNombre_prod(),String.valueOf(dp.getCantidad()),String.valueOf(dp.getValor_producto()),String.valueOf(dp.getIva()),String.valueOf(dp.getValortotal())};
+            modelo_Pedido.addRow(datos);
+        }
     }
 
     public String GenerarCodigo() {
@@ -39,13 +91,14 @@ public class Gestion_Pedidos extends javax.swing.JFrame {
             transf = transf + String.valueOf(cod);
         } else {
             cods = cp.ListadoPedidos().get(cp.ListadoPedidos().size() - 1).getId_pedido().toString();
+            System.err.println("Codigo retornado : " + cods);
             cod = Integer.parseInt(cods);
             cod = cod + 1;
 
-            if (cod > 99) {
+            if (cod > 99 && cod < 999) {
                 transf = "000";
                 transf = transf + String.valueOf(cod);
-            } else if (cod > 999) {
+            } else if (cod > 999 && cod < 9999) {
                 transf = "00";
                 transf = transf + String.valueOf(cod);
             } else if (cod > 9999) {
@@ -101,6 +154,14 @@ public class Gestion_Pedidos extends javax.swing.JFrame {
         return fechaf;
     }
 
+   public void LimpiarTabla() {
+        int filas = tabla_Pedido.getRowCount();
+        for (int i = 0; filas > i; i++) {
+            modelo_Pedido.removeRow(0);
+        }
+    }
+    
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -119,7 +180,7 @@ public class Gestion_Pedidos extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         txtFechaPedido = new datechooser.beans.DateChooserCombo();
-        txtCodigoPago = new javax.swing.JTextField();
+        txtCodigoPedido = new javax.swing.JTextField();
         txtIdCliente = new javax.swing.JTextField();
         jButton9 = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
@@ -243,7 +304,7 @@ public class Gestion_Pedidos extends javax.swing.JFrame {
         );
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Información de Pedido"));
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Información de Pedido", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 16))); // NOI18N
 
         jLabel1.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel1.setText("Codigo Pedido");
@@ -254,7 +315,7 @@ public class Gestion_Pedidos extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel3.setText("Fecha");
 
-        txtCodigoPago.setEditable(false);
+        txtCodigoPedido.setEditable(false);
 
         txtIdCliente.setEditable(false);
 
@@ -291,7 +352,7 @@ public class Gestion_Pedidos extends javax.swing.JFrame {
                     .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtCodigoPago, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtCodigoPedido, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtTipoId, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(11, 11, 11)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -322,7 +383,7 @@ public class Gestion_Pedidos extends javax.swing.JFrame {
                     .addComponent(jLabel1)
                     .addComponent(jLabel2)
                     .addComponent(jLabel3)
-                    .addComponent(txtCodigoPago, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtCodigoPedido, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtIdCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(31, 31, 31)
@@ -420,7 +481,7 @@ public class Gestion_Pedidos extends javax.swing.JFrame {
                     .addComponent(jButton2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(29, 29, 29))
         );
@@ -446,8 +507,8 @@ public class Gestion_Pedidos extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void btnListaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListaActionPerformed
-        Listado_Clientes_Pedido lcp = new Listado_Clientes_Pedido();
-        lcp.setVisible(true);
+        Listado_Pedidos lp = new Listado_Pedidos();
+        lp.setVisible(true);
     }//GEN-LAST:event_btnListaActionPerformed
 
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
@@ -466,7 +527,7 @@ public class Gestion_Pedidos extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Debe Seleccionar un cliente", "Error", JOptionPane.ERROR_MESSAGE);
         } else {
             Pedido p = new Pedido();
-            p.setId_pedido(txtCodigoPago.getText());
+            p.setId_pedido(txtCodigoPedido.getText());
             p.setFecha(ConvertidorFecha(txtFechaPedido.getText()));
             p.setId_cliente(txtIdCliente.getText());
             p.setTotal_iva(Float.parseFloat(lblTotalIva.getText()));
@@ -483,7 +544,8 @@ public class Gestion_Pedidos extends javax.swing.JFrame {
                     d.setValortotal(Float.parseFloat(modelo_Pedido.getValueAt(i, 6).toString()));
                     cdp.RegistrarDetalle_Pedido(d);
                 }
-                txtCodigoPago.setText(GenerarCodigo());
+                LimpiarForm();
+                JOptionPane.showMessageDialog(null,"Pedido Registrado Correctamente !!!!");
             } else {
                 JOptionPane.showMessageDialog(null, "Error al Registrar Pedido");
             }
@@ -524,12 +586,8 @@ public class Gestion_Pedidos extends javax.swing.JFrame {
 
                 lblTotalIva.setText(String.valueOf(totaliva));
                 lblTotalPagar.setText(String.valueOf(totalpago));
-
             }
-
         }
-
-
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
@@ -622,7 +680,7 @@ public class Gestion_Pedidos extends javax.swing.JFrame {
     public static javax.swing.JLabel lblTotalPagar;
     public static javax.swing.JTable tabla_Pedido;
     public static javax.swing.JTextField txtApellidos;
-    private javax.swing.JTextField txtCodigoPago;
+    private javax.swing.JTextField txtCodigoPedido;
     private datechooser.beans.DateChooserCombo txtFechaPedido;
     public static javax.swing.JTextField txtIdCliente;
     public static javax.swing.JTextField txtNombres;
