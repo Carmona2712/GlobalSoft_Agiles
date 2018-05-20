@@ -19,12 +19,28 @@ public class Listado_Pedidos extends javax.swing.JFrame {
 
     Controlador_Pedido cp = new Controlador_Pedido();
     DefaultTableModel modelo = new DefaultTableModel();
+
     public Listado_Pedidos() {
         initComponents();
         CrearTabla();
         CargarTabla();
         txtFechaFinal3.setEnabled(false);
         txtFechaInicial3.setEnabled(false);
+    }
+
+    public String ConvertidorFecha(String fecha) {
+        String dia;
+        String mes;
+        String anio;
+        String[] fechar;
+        String fechaf;
+
+        fechar = fecha.split("-");
+        dia = fechar[1];
+        mes = fechar[0];
+        anio = fechar[2];
+        fechaf = anio + "-" + mes + "-" + dia;
+        return fechaf;
     }
 
     public void CrearTabla() {
@@ -40,6 +56,32 @@ public class Listado_Pedidos extends javax.swing.JFrame {
             String datos[] = {p.getId_pedido(), p.getFecha(), String.valueOf(p.getLista_Detalles().size()), String.valueOf(p.getTotal_iva()), String.valueOf(p.getTotal_pedido())};
             modelo.addRow(datos);
         }
+    }
+
+    public void CargarTablaXFechas() {
+        String fechai = ConvertidorFecha(txtFechaInicial3.getText());
+        String fechaf = ConvertidorFecha(txtFechaFinal3.getText());
+        ArrayList<Pedido> lp = cp.ListadoPedidosxRangoFechas(fechai, fechaf);
+        LimpiarTabla();
+        for (Pedido p : lp) {
+            String datos[] = {p.getId_pedido(), p.getFecha(), String.valueOf(p.getLista_Detalles().size()), String.valueOf(p.getTotal_iva()), String.valueOf(p.getTotal_pedido())};
+            modelo.addRow(datos);
+        }
+    }
+
+    public void CargarTablaXcod(String cod) {
+        ArrayList<Pedido> lp = new ArrayList();
+        if (cp.BuscarPedidoxCod(cod) == null) {
+            LimpiarTabla();
+        } else {
+            lp.add(cp.BuscarPedidoxCod(cod));
+            LimpiarTabla();
+            for (Pedido p : lp) {
+                String datos[] = {p.getId_pedido(), p.getFecha(), String.valueOf(p.getLista_Detalles().size()), String.valueOf(p.getTotal_iva()), String.valueOf(p.getTotal_pedido())};
+                modelo.addRow(datos);
+            }
+        }
+
     }
 
     public void LimpiarTabla() {
@@ -276,9 +318,9 @@ public class Listado_Pedidos extends javax.swing.JFrame {
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         // TODO add your handling code here:
-        if(TablaPedido.getSelectedRow()<0){
-            JOptionPane.showMessageDialog(null,"Debes seleccionar un pedido");
-        }else{
+        if (TablaPedido.getSelectedRow() < 0) {
+            JOptionPane.showMessageDialog(null, "Debes seleccionar un pedido");
+        } else {
             Pedido p;
             int f;
             int c = 0;
@@ -295,9 +337,15 @@ public class Listado_Pedidos extends javax.swing.JFrame {
         if (CboOpcion3.getSelectedItem().toString().equals("Rango Fechas")) {
             txtFechaFinal3.setEnabled(true);
             txtFechaInicial3.setEnabled(true);
-        }else{
+            btnBuscar3.setEnabled(true);
+            txtbuscar3.setEnabled(false);
+            CargarTablaXFechas();
+        } else {
+            btnBuscar3.setEnabled(true);
             txtFechaFinal3.setEnabled(false);
             txtFechaInicial3.setEnabled(false);
+            txtbuscar3.setEnabled(true);
+            CargarTablaXcod(txtbuscar3.getText());
         }
     }//GEN-LAST:event_CboOpcion3ItemStateChanged
 
@@ -307,7 +355,11 @@ public class Listado_Pedidos extends javax.swing.JFrame {
 
     private void btnBuscar3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscar3ActionPerformed
         // TODO add your handling code here:
-
+        if (CboOpcion3.getSelectedItem().toString().equals("Rango Fechas")) {
+            CargarTablaXFechas();
+        } else {
+            CargarTablaXcod(txtbuscar3.getText());
+        }
 
     }//GEN-LAST:event_btnBuscar3ActionPerformed
 
@@ -317,9 +369,9 @@ public class Listado_Pedidos extends javax.swing.JFrame {
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         // TODO add your handling code here:
-        if(TablaPedido.getSelectedRow()<0){
-            JOptionPane.showMessageDialog(null,"Debes seleccionar un pedido");
-        }else{
+        if (TablaPedido.getSelectedRow() < 0) {
+            JOptionPane.showMessageDialog(null, "Debes seleccionar un pedido");
+        } else {
             Pedido p;
             int f;
             int c = 0;
@@ -342,7 +394,7 @@ public class Listado_Pedidos extends javax.swing.JFrame {
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
+                if ("windows".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }

@@ -116,7 +116,31 @@ public class Controlador_Pedido {
         return Listap;
     }
     
-    
+   public ArrayList<Pedido> ListadoPedidosxRangoFechas(String fechai,String fechaf){
+        ArrayList<Pedido> Listap = new ArrayList();
+        Controlador_Detalle_Pedido cd = new Controlador_Detalle_Pedido();
+         try {
+            Conectar();
+            String sql = "Select * from pedido where fecha_pedido between '"+fechai+"' and '"+fechaf+"'  order by fecha_pedido";
+            st = con.createStatement();
+            rs = st.executeQuery(sql);
+            while (rs.next()) {
+               Pedido p = new Pedido();
+                p.setId_pedido(rs.getString(1));
+                p.setFecha(rs.getString(2));
+                p.setId_cliente(rs.getString(3));
+                p.setTotal_iva(rs.getFloat(4));
+                p.setTotal_pedido(rs.getFloat(5));
+                p.setLista_Detalles(cd.ListadoDetallePedidos(p.getId_pedido()));
+                Listap.add(p);
+            }
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage() + " en el Controlador _ de Giro Negocio", "Error", JOptionPane.ERROR_MESSAGE);
+            // System.out.println(sql);
+        }
+        return Listap;
+    }
     
     
     public Pedido BuscarPedidoxCod(String cod){
@@ -134,4 +158,26 @@ public class Controlador_Pedido {
     }
     
 
+    public int EliminarPedido(String id) {
+        int exito = 0;
+        try {
+            Conectar();
+            st = con.createStatement();
+            String sql = "delete from  pedido where id_pedido = '" + id + "'";
+            //st.execute(sql);
+            //exito = 1;
+            if (st.executeUpdate(sql) > 0) {
+                exito = 1;
+            } else {
+                exito = 0;
+            }
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            exito = 0;
+        }
+        return exito;
+    }
+    
+    
 }
