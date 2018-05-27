@@ -151,4 +151,25 @@ public class Controlador_Recurso {
 
     }
 
+    public int EliminarRecurso(String cod) {
+        int exi = 0;
+        String sql = " DELETE FROM RECURSO WHERE codigo = '" + cod + "'";
+        try {
+            Conectar();
+            //System.out.println(sql);
+            st = con.createStatement();
+            //st.execute(sql);
+            if (st.executeUpdate(sql) > 0) {
+                exi = 1;
+            } else {
+                exi = 0;
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage() + " en el Controlador_Recurso - Eliminar", "Error", JOptionPane.ERROR_MESSAGE);
+            // System.out.println(sql);
+            exi = 0;
+        }
+        return exi;
+    }
+
 }
