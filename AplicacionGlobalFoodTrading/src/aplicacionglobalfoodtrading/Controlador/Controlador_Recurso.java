@@ -126,6 +126,29 @@ public class Controlador_Recurso {
         return re;
     }
 
-   
+    public int ModificarRecurso(Recurso r) {
+        int exi = 0;
+        String sql = "UPDATE `recurso` SET `recurso`='" + r.getNom_recurso() + "',`tipo`='" + r.getTipo() + "',`marca`='" + r.getMaraca() + "',`cantidad`=" + r.getCantidad() + ",`precio`=" + r.getPrecio() + ",`fecha_adq`='" + r.getFecha_adq() + "',`fecha_garantia`='" + r.getFecha_garantia() + "',`cod_factura`='" + r.getCod_factura() + "',`codigo_seguro`='" + r.getCod_seguro() + "',`nombre_seguro`='" + r.getNombre_seguro() + "',`imagen`='" + r.getImagen() + "' WHERE codigo = '" + r.getCodigo() + "'";
+        try {
+            Conectar();
+            //System.out.println(sql);
+            System.out.println(sql);
+            st = con.createStatement();
+            //st.execute(sql);
+            if (st.executeUpdate(sql) > 0) {
+                exi = 1;
+            } else {
+                exi = 0;
+            }
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage() + " en el Controlado Recurso -- Modificar", "Error", JOptionPane.ERROR_MESSAGE);
+            // System.out.println(sql);
+            exi = 0;
+        }
+
+        return exi;
+
+    }
 
 }
