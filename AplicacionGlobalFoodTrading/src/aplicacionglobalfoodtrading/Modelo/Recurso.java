@@ -17,8 +17,10 @@ public class Recurso {
     private String fecha_garantia;
     private String cod_seguro;
     private String imagen;
+    private String nombre_seguro;
+    private String cod_factura;
 
-    public Recurso(String codigo, String nom_recurso, String tipo, String maraca, int cantidad, int precio, String fecha_adq, String fecha_garantia, String cod_seguro, String imagen) {
+    public Recurso(String codigo, String nom_recurso, String tipo, String maraca, int cantidad, int precio, String fecha_adq, String fecha_garantia, String cod_seguro, String imagen, String nombre_seguro, String cod_factura) {
         this.codigo = codigo;
         this.nom_recurso = nom_recurso;
         this.tipo = tipo;
@@ -29,7 +31,11 @@ public class Recurso {
         this.fecha_garantia = fecha_garantia;
         this.cod_seguro = cod_seguro;
         this.imagen = imagen;
+        this.nombre_seguro = nombre_seguro;
+        this.cod_factura = cod_factura;
     }
+
+    
 
     public Recurso() {
     }
@@ -112,6 +118,22 @@ public class Recurso {
 
     public void setImagen(String imagen) {
         this.imagen = imagen;
+    }
+
+    public String getNombre_seguro() {
+        return nombre_seguro;
+    }
+
+    public void setNombre_seguro(String nombre_seguro) {
+        this.nombre_seguro = nombre_seguro;
+    }
+
+    public String getCod_factura() {
+        return cod_factura;
+    }
+
+    public void setCod_factura(String cod_factura) {
+        this.cod_factura = cod_factura;
     }
     
     
