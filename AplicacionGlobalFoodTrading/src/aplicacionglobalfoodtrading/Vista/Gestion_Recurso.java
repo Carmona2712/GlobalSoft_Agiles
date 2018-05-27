@@ -5,6 +5,7 @@
  */
 package aplicacionglobalfoodtrading.Vista;
 
+import javax.swing.JOptionPane;
 
 public class Gestion_Recurso extends javax.swing.JFrame {
 
@@ -14,7 +15,6 @@ public class Gestion_Recurso extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
     }
 
-    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -97,8 +97,20 @@ public class Gestion_Recurso extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel1.setText("Código");
 
+        txtCodigo.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCodigoKeyTyped(evt);
+            }
+        });
+
         jLabel2.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel2.setText("Nombre");
+
+        txtNombre.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNombreKeyTyped(evt);
+            }
+        });
 
         jLabel3.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel3.setText("Fecha adquisición");
@@ -106,8 +118,20 @@ public class Gestion_Recurso extends javax.swing.JFrame {
         jLabel4.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel4.setText("Marca");
 
+        txtMarca.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtMarcaKeyTyped(evt);
+            }
+        });
+
         jLabel5.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel5.setText("Cantidad");
+
+        txtCantidad.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCantidadKeyTyped(evt);
+            }
+        });
 
         jLabel6.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel6.setText("Tipo");
@@ -116,6 +140,12 @@ public class Gestion_Recurso extends javax.swing.JFrame {
 
         jLabel7.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel7.setText("Precio");
+
+        txtPrecio.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtPrecioKeyTyped(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -187,14 +217,32 @@ public class Gestion_Recurso extends javax.swing.JFrame {
         jLabel8.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel8.setText("N° Póliza Seguro");
 
+        txtNoPolizaS.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNoPolizaSKeyTyped(evt);
+            }
+        });
+
         jLabel9.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel9.setText("F Límite Garantia");
 
         jLabel10.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel10.setText("Nombre Emp Seguro");
 
+        txtNoFactura.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNoFacturaKeyTyped(evt);
+            }
+        });
+
         jLabel11.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel11.setText("N° de Factura");
+
+        txtNombEmpSeg.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNombEmpSegKeyTyped(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -405,7 +453,7 @@ public class Gestion_Recurso extends javax.swing.JFrame {
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
         // TODO add your handling code here:
-        
+
 
     }//GEN-LAST:event_jButton8ActionPerformed
 
@@ -416,12 +464,12 @@ public class Gestion_Recurso extends javax.swing.JFrame {
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         // TODO add your handling code here:
-    
+
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
         // TODO add your handling code here:
-  
+
     }//GEN-LAST:event_btnLimpiarActionPerformed
 
     private void btnAtrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtrasActionPerformed
@@ -431,15 +479,113 @@ public class Gestion_Recurso extends javax.swing.JFrame {
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
 
-       
+
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         // TODO add your handling code here:
 
-       
 
     }//GEN-LAST:event_btnGuardarActionPerformed
+
+    private void txtCodigoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCodigoKeyTyped
+        // TODO add your handling code here:
+        String texto = txtCodigo.getText();
+        if (texto.length() > 25) {
+            evt.consume();
+            JOptionPane.showMessageDialog(null, "Solo se permiten 25 caracteres en este campo.");
+        }
+    }//GEN-LAST:event_txtCodigoKeyTyped
+
+    private void txtNombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreKeyTyped
+        // TODO add your handling code here:
+        String texto = txtNombre.getText();
+        if (texto.length() > 40) {
+            evt.consume();
+            JOptionPane.showMessageDialog(null, "Solo se permiten 40 caracteres en este campo.");
+        }
+    }//GEN-LAST:event_txtNombreKeyTyped
+
+    private void txtMarcaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtMarcaKeyTyped
+        // TODO add your handling code here:
+        String texto = txtMarca.getText();
+        if (texto.length() > 35) {
+            evt.consume();
+            JOptionPane.showMessageDialog(null, "Solo se permiten 35 caracteres en este campo.");
+        }
+    }//GEN-LAST:event_txtMarcaKeyTyped
+
+    private void txtCantidadKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCantidadKeyTyped
+        // TODO add your handling code here:
+        Character c = evt.getKeyChar();
+        String texto = txtCantidad.getText();
+        if (Character.isAlphabetic(c) || Character.isSpaceChar(c) || c == '.' || c == ',') {
+            evt.consume();
+            JOptionPane.showMessageDialog(null, "Solo se permiten numeros númericos en este campo.");
+        } else {
+            if (texto.length() > 10) {
+                evt.consume();
+                JOptionPane.showMessageDialog(null, "Solo se permiten 10 caracteres en este campo.");
+            }
+        }
+    }//GEN-LAST:event_txtCantidadKeyTyped
+
+    private void txtPrecioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrecioKeyTyped
+        // TODO add your handling code here:
+        Character c = evt.getKeyChar();
+        String texto = txtPrecio.getText();
+        if (c == evt.VK_BACK_SPACE) {
+        } else if (!Character.isDigit(c)) {
+            evt.consume();
+            JOptionPane.showMessageDialog(null, "Solo se permiten numeros númericos en este campo.");
+        } else {
+            if (texto.length() > 10) {
+                evt.consume();
+                JOptionPane.showMessageDialog(null, "Solo se permiten 10 caracteres en este campo.");
+            }
+        }
+    }//GEN-LAST:event_txtPrecioKeyTyped
+
+    private void txtNoPolizaSKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNoPolizaSKeyTyped
+        Character c = evt.getKeyChar();
+        String texto = txtNoPolizaS.getText();
+        if (c == evt.VK_BACK_SPACE) {
+
+        } else {
+            if (texto.length() > 15) {
+                evt.consume();
+                JOptionPane.showMessageDialog(null, "Solo se permiten 15 caracteres en este campo.");
+            }
+        }
+    }//GEN-LAST:event_txtNoPolizaSKeyTyped
+
+    private void txtNombEmpSegKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombEmpSegKeyTyped
+        // TODO add your handling code here:
+        Character c = evt.getKeyChar();
+        String texto = txtNombEmpSeg.getText();
+        if (c == evt.VK_BACK_SPACE) {
+
+        } else {
+            if (texto.length() > 30) {
+                evt.consume();
+                JOptionPane.showMessageDialog(null, "Solo se permiten 30 caracteres en este campo.");
+            }
+        }
+    }//GEN-LAST:event_txtNombEmpSegKeyTyped
+
+    private void txtNoFacturaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNoFacturaKeyTyped
+        // TODO add your handling code here:
+        Character c = evt.getKeyChar();
+        String texto = txtNoFactura.getText();
+        if (c == evt.VK_BACK_SPACE) {
+
+        } else {
+            if (texto.length() > 20) {
+                evt.consume();
+                JOptionPane.showMessageDialog(null, "Solo se permiten 20 caracteres en este campo.");
+            }
+        }
+    }//GEN-LAST:event_txtNoFacturaKeyTyped
 
     /**
      * @param args the command line arguments

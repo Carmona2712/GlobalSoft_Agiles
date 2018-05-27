@@ -241,6 +241,9 @@
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="txtCodigo">
+              <Events>
+                <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtCodigoKeyTyped"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel2">
               <Properties>
@@ -251,6 +254,9 @@
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="txtNombre">
+              <Events>
+                <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtNombreKeyTyped"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel3">
               <Properties>
@@ -269,6 +275,9 @@
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="txtMarca">
+              <Events>
+                <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtMarcaKeyTyped"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel5">
               <Properties>
@@ -279,6 +288,9 @@
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="txtCantidad">
+              <Events>
+                <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtCantidadKeyTyped"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel6">
               <Properties>
@@ -315,6 +327,9 @@
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="txtPrecio">
+              <Events>
+                <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtPrecioKeyTyped"/>
+              </Events>
             </Component>
             <Component class="datechooser.beans.DateChooserCombo" name="txtFechaAdq">
             </Component>
@@ -397,6 +412,9 @@
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="txtNoPolizaS">
+              <Events>
+                <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtNoPolizaSKeyTyped"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel9">
               <Properties>
@@ -417,6 +435,9 @@
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="txtNoFactura">
+              <Events>
+                <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtNoFacturaKeyTyped"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel11">
               <Properties>
@@ -427,6 +448,9 @@
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="txtNombEmpSeg">
+              <Events>
+                <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtNombEmpSegKeyTyped"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>
