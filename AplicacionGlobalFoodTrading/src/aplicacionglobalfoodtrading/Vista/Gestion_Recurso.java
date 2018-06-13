@@ -5,14 +5,207 @@
  */
 package aplicacionglobalfoodtrading.Vista;
 
+import aplicacionglobalfoodtrading.Controlador.Controlador_Recurso;
+import aplicacionglobalfoodtrading.Modelo.Recurso;
+import static aplicacionglobalfoodtrading.Vista.Empleado_IndirectoVista.encodeToString;
+import static aplicacionglobalfoodtrading.Vista.Registro_Empleados_Directos.encodeToString;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import static java.awt.image.ImageObserver.ALLBITS;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.sql.Blob;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import sun.misc.BASE64Decoder;
+import sun.misc.BASE64Encoder;
 
 public class Gestion_Recurso extends javax.swing.JFrame {
+
+    Controlador_Recurso cr = new Controlador_Recurso();
+    private JPanel contentPane;
+    File fichero = null;
+    private static Connection con;
+    private static ResultSet rs;
+    private static Statement st;
 
     public Gestion_Recurso() {
         initComponents();
         this.setTitle("Gestión de recursos");
         this.setLocationRelativeTo(null);
+    }
+
+    public Gestion_Recurso(Recurso r) {
+        initComponents();
+        this.setTitle("Gestión de recursos");
+        this.setLocationRelativeTo(null);
+        CargarForm(r);
+        btnGuardar.setEnabled(false);
+        this.btnBuscar.setEnabled(false);
+        this.btnLista.setEnabled(false);
+        this.btnBuscar.setEnabled(false);
+    }
+
+    public void CargarForm(Recurso r) {
+        this.txtCodigo.setText(r.getCodigo());
+        this.txtNombre.setText(r.getNom_recurso());
+        this.txtPrecio.setText(String.valueOf(r.getPrecio()));
+        this.txtCantidad.setText(String.valueOf(r.getCantidad()));
+        this.txtMarca.setText(r.getMaraca());
+        this.cboTipo.setSelectedItem(r.getTipo());
+        this.txtNoFactura.setText(r.getCod_factura());
+        this.txtNombEmpSeg.setText(r.getNombre_seguro());
+        this.txtNoPolizaS.setText(r.getCod_seguro());
+        this.txtFechaAdq.setText(r.getFecha_adq());
+        this.txtFechaGarantia.setText(r.getFecha_garantia());
+        cargar(r.getCodigo());
+    }
+
+    public void Limpiar_Form() {
+        this.txtCodigo.setText("");
+        this.txtNombre.setText("");
+        this.txtPrecio.setText("");
+        this.txtCantidad.setText("");
+        this.txtMarca.setText("");
+        this.cboTipo.setSelectedIndex(0);
+        this.txtNoFactura.setText("");
+        this.txtNombEmpSeg.setText("");
+        this.txtNoPolizaS.setText("");
+        this.lblImagen.setIcon(null);
+    }
+
+    public String ConvertidorFecha(String fecha) {
+        System.out.println(fecha);
+        String dia;
+        String mes;
+        String anio;
+        String[] fechar;
+        String fechaf;
+        fechar = fecha.split("/");
+        dia = fechar[0];
+        mes = fechar[1];
+        anio = fechar[2];
+        fechaf = anio + "-" + mes + "-" + dia;
+        System.out.println(fechaf);
+        return fechaf;
+    }
+
+    public void Conectar() {
+
+        try {
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/bd_gft", "root", "");
+        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error al conectar BD");
+        }
+    }
+
+    public static String encodeToString(BufferedImage image) {
+        String imageString = null;
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+
+        try {
+            ImageIO.write(image, "jpg", bos);
+            byte[] imageBytes = bos.toByteArray();
+
+            BASE64Encoder encoder = new BASE64Encoder();
+            imageString = encoder.encode(imageBytes);
+
+            bos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return imageString;
+    }
+
+    public static BufferedImage decodeToImage(String imageString) {
+
+        BufferedImage image = null;
+        byte[] imageByte;
+        try {
+            BASE64Decoder decoder = new BASE64Decoder();
+            imageByte = decoder.decodeBuffer(imageString);
+            ByteArrayInputStream bis = new ByteArrayInputStream(imageByte);
+            image = ImageIO.read(bis);
+            bis.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return image;
+    }
+
+    private String ObtenerExtension(File file) {
+        String name = file.getName();
+        try {
+            return name.substring(name.lastIndexOf(".") + 1);
+        } catch (Exception e) {
+            return "";
+        }
+    }
+
+    void cargar(String cod) {
+        BufferedImage img = null;
+        String sql = "SELECT `imagen` from  `recurso` WHERE `codigo` = '" + cod + "'";
+        String imagen_string = null;
+
+        try {
+            Conectar();
+            Statement s = con.createStatement();
+            ResultSet rs = s.executeQuery(sql);
+            while (rs.next()) {
+                imagen_string = rs.getString("imagen");
+                //lb_nombre.setText(rs.getString("nombre"));
+            }
+            if (imagen_string == null) {
+                //cont = cont - 1;
+                //contar();
+                System.out.println("Entro al imagen = null");
+            } else {
+
+                try {
+                    img = decodeToImage(imagen_string);
+                    ImageIcon icon = new ImageIcon(img);
+                    Icon icono = new ImageIcon(icon.getImage().getScaledInstance(lblImagen.getWidth(), lblImagen.getHeight(), Image.SCALE_DEFAULT));
+                    lblImagen.setText(null);
+                    lblImagen.setIcon(icono);
+                } catch (java.lang.NullPointerException ex) {
+                    System.err.println("Imagen nula");
+                }
+            }
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Error en el cargar imagen : " + ex.getMessage());
+        }
+    }
+
+    public ImageIcon getImagen(Blob b) {
+        ImageIcon imageIcon = null;
+        // String sql = "SELECT imagen FROM tabla WHERE id=" + id;
+        // ResultSet resultSet = SQLQuery(sql);
+        try {
+
+            Blob bytesImagen = b;
+            byte[] bytesLeidos = bytesImagen.getBytes(1, ALLBITS);
+            imageIcon = new ImageIcon(bytesLeidos);
+            //this.lbfoto.setIcon(imageIcon);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return imageIcon;
     }
 
     @SuppressWarnings("unchecked")
@@ -69,6 +262,11 @@ public class Gestion_Recurso extends javax.swing.JFrame {
         lblImagen.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         btnSubirImagen.setText("Subir fotografía");
+        btnSubirImagen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSubirImagenActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -76,10 +274,10 @@ public class Gestion_Recurso extends javax.swing.JFrame {
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(lblImagen, javax.swing.GroupLayout.DEFAULT_SIZE, 269, Short.MAX_VALUE)
-                    .addComponent(btnSubirImagen, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(124, 124, 124))
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnSubirImagen, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblImagen, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(69, 69, 69))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -127,6 +325,7 @@ public class Gestion_Recurso extends javax.swing.JFrame {
         jLabel5.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel5.setText("Cantidad");
 
+        txtCantidad.setText("0");
         txtCantidad.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtCantidadKeyTyped(evt);
@@ -141,11 +340,15 @@ public class Gestion_Recurso extends javax.swing.JFrame {
         jLabel7.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel7.setText("Precio");
 
+        txtPrecio.setText("0");
         txtPrecio.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtPrecioKeyTyped(evt);
             }
         });
+
+        txtFechaAdq.setNothingAllowed(false);
+        txtFechaAdq.setFormat(2);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -312,12 +515,12 @@ public class Gestion_Recurso extends javax.swing.JFrame {
             }
         });
 
-        btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/aplicacionglobalfoodtrading/Iconos/1477811446_Search32x32.png"))); // NOI18N
+        btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/aplicacionglobalfoodtrading/Iconos/Buscar32x32.png"))); // NOI18N
         btnBuscar.setToolTipText("Buscar  Empleado mediante su identificacion");
         btnBuscar.setBorderPainted(false);
         btnBuscar.setContentAreaFilled(false);
         btnBuscar.setFocusPainted(false);
-        btnBuscar.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/aplicacionglobalfoodtrading/Iconos/1477811460_Search48x48.png"))); // NOI18N
+        btnBuscar.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/aplicacionglobalfoodtrading/Iconos/Buscar48x48.png"))); // NOI18N
         btnBuscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBuscarActionPerformed(evt);
@@ -348,12 +551,12 @@ public class Gestion_Recurso extends javax.swing.JFrame {
             }
         });
 
-        btnEditar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/aplicacionglobalfoodtrading/Iconos/1479450025_edit-file32x32.png"))); // NOI18N
+        btnEditar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/aplicacionglobalfoodtrading/Iconos/Editar32x32.png"))); // NOI18N
         btnEditar.setToolTipText("Reescribir informacion del empleado");
         btnEditar.setBorderPainted(false);
         btnEditar.setContentAreaFilled(false);
         btnEditar.setFocusPainted(false);
-        btnEditar.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/aplicacionglobalfoodtrading/Iconos/1479450710_edit-file48x48.png"))); // NOI18N
+        btnEditar.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/aplicacionglobalfoodtrading/Iconos/Editar48x48.png"))); // NOI18N
         btnEditar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEditarActionPerformed(evt);
@@ -379,32 +582,33 @@ public class Gestion_Recurso extends javax.swing.JFrame {
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addGap(26, 26, 26)
                 .addComponent(btnAtras)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 195, Short.MAX_VALUE)
-                .addComponent(btnGuardar)
-                .addGap(68, 68, 68)
-                .addComponent(btnBuscar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
+                .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(btnLista)
-                .addGap(123, 123, 123)
-                .addComponent(btnLimpiar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnEditar)
-                .addGap(109, 109, 109)
-                .addComponent(jButton8)
-                .addGap(85, 85, 85))
+                .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(27, 27, 27)
+                .addComponent(btnLista, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(34, 34, 34)
+                .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(33, 33, 33)
+                .addComponent(btnLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(29, 29, 29))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnLista, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnAtras, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jButton8, javax.swing.GroupLayout.Alignment.CENTER, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnAtras, javax.swing.GroupLayout.Alignment.CENTER, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.CENTER, jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                        .addComponent(btnLimpiar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnEditar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnLista, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnBuscar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -415,11 +619,11 @@ public class Gestion_Recurso extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -453,23 +657,41 @@ public class Gestion_Recurso extends javax.swing.JFrame {
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
         // TODO add your handling code here:
-
+        if (txtCodigo.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Debe ingresar un código !!!");
+        } else {
+            if (cr.EliminarRecurso(txtCodigo.getText()) > 0) {
+                JOptionPane.showMessageDialog(null, "Se elimino correctamente el recurso");
+                Limpiar_Form();
+            } else {
+                JOptionPane.showMessageDialog(null, "Error al eliminar recurso.");
+            }
+        }
 
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void btnListaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListaActionPerformed
-        Listado_Clientes lc = new Listado_Clientes();
+        Listado_Recursos lc = new Listado_Recursos();
         lc.setVisible(true);
     }//GEN-LAST:event_btnListaActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         // TODO add your handling code here:
-
+        if (txtCodigo.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Ingrese un código de recurso");
+        } else {
+            Recurso r = cr.RetornarRecursoxCodigo(txtCodigo.getText());
+            if (r == null) {
+                JOptionPane.showMessageDialog(null, "No se encontro el recurso a buscar !!!");
+            } else {
+                CargarForm(r);
+            }
+        }
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
         // TODO add your handling code here:
-
+        Limpiar_Form();
     }//GEN-LAST:event_btnLimpiarActionPerformed
 
     private void btnAtrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtrasActionPerformed
@@ -478,14 +700,85 @@ public class Gestion_Recurso extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAtrasActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        if (txtCodigo.getText().isEmpty() || txtNombre.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "El código y nombre del recursos son obligatorios.", "Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+            try {
+                Recurso r = new Recurso();
+                r.setCodigo(this.txtCodigo.getText());
+                r.setNom_recurso(this.txtNombre.getText());
+                r.setCantidad(Integer.parseInt(this.txtCantidad.getText()));
+                r.setPrecio(Integer.parseInt(this.txtPrecio.getText()));
+                r.setTipo(this.cboTipo.getSelectedItem().toString());
+                r.setMaraca(this.txtMarca.getText());
+                String fechaadq = ConvertidorFecha(this.txtFechaAdq.getText());
+                r.setFecha_adq(fechaadq);
+                String fechaGar = ConvertidorFecha(this.txtFechaGarantia.getText());
+                r.setFecha_garantia(fechaGar);
+                r.setCod_seguro(this.txtNoPolizaS.getText());
+                r.setNombre_seguro(this.txtNombEmpSeg.getText());
+                r.setCod_factura(this.txtNoFactura.getText());
 
+                if (lblImagen.getIcon() == null) {
+                    System.err.println("No hay foto");
+                    r.setImagen("null");
+                } else {
+                    try {
+                        BufferedImage img = ImageIO.read(new File(fichero.toString()));
+                        String image_string = encodeToString(img);
+                        r.setImagen(image_string);
+                    } catch (java.lang.NullPointerException ex) {
+                        System.out.println("ERror en cargar la imagen : " + ex.getMessage());
+                    }
+                }
+
+                if (cr.ModificarRecurso(r) > 0) {
+                    Limpiar_Form();
+                    JOptionPane.showMessageDialog(null, "Se Modifico correctamente el recurso");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Error al modificar recurso", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(null, "Error en el registro de imagen " + ex.getMessage());
+                //Logger.getLogger(Gestion_Recurso.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
 
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        // TODO add your handling code here:
-
-
+        if (txtCodigo.getText().isEmpty() || txtNombre.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "El código y nombre del recursos son obligatorios.", "Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+            try {
+                Recurso r = new Recurso();
+                r.setCodigo(this.txtCodigo.getText());
+                r.setNom_recurso(this.txtNombre.getText());
+                r.setCantidad(Integer.parseInt(this.txtCantidad.getText()));
+                r.setPrecio(Integer.parseInt(this.txtCantidad.getText()));
+                r.setTipo(this.cboTipo.getSelectedItem().toString());
+                r.setMaraca(this.txtMarca.getText());
+                String fechaadq = ConvertidorFecha(this.txtFechaAdq.getText());
+                r.setFecha_adq(fechaadq);
+                String fechaGar = ConvertidorFecha(this.txtFechaGarantia.getText());
+                r.setFecha_garantia(fechaGar);
+                r.setCod_seguro(this.txtNoPolizaS.getText());
+                r.setNombre_seguro(this.txtNombEmpSeg.getText());
+                r.setCod_factura(this.txtNoFactura.getText());
+                BufferedImage img = ImageIO.read(new File(fichero.toString()));
+                String image_string = encodeToString(img);
+                r.setImagen(image_string);
+                if (cr.RegistrarRecurso(r) > 0) {
+                    Limpiar_Form();
+                    JOptionPane.showMessageDialog(null, "Se registro correctamente el recurso");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Error al registrar recurso", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(null, "Error en el registro de imagen " + ex.getMessage());
+                //Logger.getLogger(Gestion_Recurso.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void txtCodigoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCodigoKeyTyped
@@ -586,6 +879,31 @@ public class Gestion_Recurso extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_txtNoFacturaKeyTyped
+
+    private void btnSubirImagenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubirImagenActionPerformed
+        // TODO add your handling code here:
+        JFileChooser file = new JFileChooser();
+        FileNameExtensionFilter filtro = new FileNameExtensionFilter("*.jpg", "jpg");
+        file.setFileFilter(filtro);
+
+        int seleccion = file.showOpenDialog(contentPane);
+        //Si el usuario, pincha en aceptar
+        if (seleccion == JFileChooser.APPROVE_OPTION) {
+            //Seleccionamos el fichero
+            fichero = file.getSelectedFile();
+            //Ecribe la ruta del fichero seleccionado en el campo de texto
+            if (!ObtenerExtension(fichero).equals("jpg")) {
+                JOptionPane.showMessageDialog(null, "La imagen debe ser formato 'jpg'", "Error", JOptionPane.ERROR_MESSAGE);
+            } else {
+                String ubica = fichero.getAbsolutePath();
+                ImageIcon icon = new ImageIcon(fichero.toString());
+                System.out.println(fichero.getName());
+                Icon icono = new ImageIcon(icon.getImage().getScaledInstance(lblImagen.getWidth(), lblImagen.getHeight(), Image.SCALE_DEFAULT));
+                lblImagen.setText(null);
+                lblImagen.setIcon(icono);
+            }
+        }
+    }//GEN-LAST:event_btnSubirImagenActionPerformed
 
     /**
      * @param args the command line arguments

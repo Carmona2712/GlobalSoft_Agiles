@@ -49,9 +49,11 @@ public class Menu_Principal extends javax.swing.JFrame {
         jMenu8 = new javax.swing.JMenu();
         jMenuItem9 = new javax.swing.JMenuItem();
         jMenuItem10 = new javax.swing.JMenuItem();
-        jMenu9 = new javax.swing.JMenu();
+        jMenu16 = new javax.swing.JMenu();
         jMenuItem12 = new javax.swing.JMenuItem();
         jMenuItem13 = new javax.swing.JMenuItem();
+        jMenu15 = new javax.swing.JMenu();
+        jMenuItem18 = new javax.swing.JMenuItem();
         jMenu10 = new javax.swing.JMenu();
         jMenuItem11 = new javax.swing.JMenuItem();
         jMenuItem14 = new javax.swing.JMenuItem();
@@ -81,16 +83,16 @@ public class Menu_Principal extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(210, 210, 210)
+                .addGap(280, 280, 280)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 741, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(323, Short.MAX_VALUE))
+                .addContainerGap(400, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(54, Short.MAX_VALUE)
+                .addContainerGap(139, Short.MAX_VALUE)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 470, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(38, 38, 38))
+                .addGap(82, 82, 82))
         );
 
         jMenuBar1.setPreferredSize(new java.awt.Dimension(504, 35));
@@ -254,19 +256,44 @@ public class Menu_Principal extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu8);
 
-        jMenu9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/aplicacionglobalfoodtrading/Iconos/report_men_princ.png"))); // NOI18N
-        jMenu9.setText("Gestionar Reportes");
-        jMenu9.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jMenu16.setIcon(new javax.swing.ImageIcon(getClass().getResource("/aplicacionglobalfoodtrading/Iconos/escritorio_20_x_20.png"))); // NOI18N
+        jMenu16.setText("Gestionar Inventario");
 
-        jMenuItem12.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jMenuItem12.setText("Crear Reporte");
-        jMenu9.add(jMenuItem12);
+        jMenuItem12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/aplicacionglobalfoodtrading/Iconos/Add_Menu_Item.png"))); // NOI18N
+        jMenuItem12.setText("Registrar Recurso Fisico");
+        jMenuItem12.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem12ActionPerformed(evt);
+            }
+        });
+        jMenu16.add(jMenuItem12);
 
-        jMenuItem13.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jMenuItem13.setText("Historial de Reportes");
-        jMenu9.add(jMenuItem13);
+        jMenuItem13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/aplicacionglobalfoodtrading/Iconos/list_menu_item.png"))); // NOI18N
+        jMenuItem13.setText("Listado de Recursos");
+        jMenuItem13.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem13ActionPerformed(evt);
+            }
+        });
+        jMenu16.add(jMenuItem13);
 
-        jMenuBar1.add(jMenu9);
+        jMenuBar1.add(jMenu16);
+
+        jMenu15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/aplicacionglobalfoodtrading/Iconos/report_men_princ.png"))); // NOI18N
+        jMenu15.setText("Gestionar Reportes");
+        jMenu15.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+
+        jMenuItem18.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jMenuItem18.setIcon(new javax.swing.ImageIcon(getClass().getResource("/aplicacionglobalfoodtrading/Iconos/estadisticas_executivos.png"))); // NOI18N
+        jMenuItem18.setText("Reportes Estadisticos");
+        jMenuItem18.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem18ActionPerformed(evt);
+            }
+        });
+        jMenu15.add(jMenuItem18);
+
+        jMenuBar1.add(jMenu15);
 
         jMenu10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/aplicacionglobalfoodtrading/Iconos/Config_men_princ.png"))); // NOI18N
         jMenu10.setText("Configuracion");
@@ -401,7 +428,7 @@ public class Menu_Principal extends javax.swing.JFrame {
 
     private void jMenuItem16ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem16ActionPerformed
         // TODO add your handling code here:
-        Listado_Clientes_1_Vista lc = new Listado_Clientes_1_Vista();
+        Listado_Clientes lc = new Listado_Clientes();
         lc.setVisible(true);
     }//GEN-LAST:event_jMenuItem16ActionPerformed
 
@@ -410,6 +437,24 @@ public class Menu_Principal extends javax.swing.JFrame {
         Pago_Empleados_Vista pev = new Pago_Empleados_Vista();
         pev.setVisible(true);
     }//GEN-LAST:event_jMenuItem9ActionPerformed
+
+    private void jMenuItem12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem12ActionPerformed
+        // TODO add your handling code here:
+        Gestion_Recurso gr = new Gestion_Recurso();
+        gr.setVisible(true);
+    }//GEN-LAST:event_jMenuItem12ActionPerformed
+
+    private void jMenuItem13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem13ActionPerformed
+        // TODO add your handling code here:
+        Listado_Recursos lr = new Listado_Recursos();
+        lr.setVisible(true);
+    }//GEN-LAST:event_jMenuItem13ActionPerformed
+
+    private void jMenuItem18ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem18ActionPerformed
+        // TODO add your handling code here:
+        Estaditicas_Productos ep = new Estaditicas_Productos();
+        ep.setVisible(true);
+    }//GEN-LAST:event_jMenuItem18ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -454,6 +499,8 @@ public class Menu_Principal extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu12;
     private javax.swing.JMenu jMenu13;
     private javax.swing.JMenu jMenu14;
+    private javax.swing.JMenu jMenu15;
+    private javax.swing.JMenu jMenu16;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
@@ -461,7 +508,6 @@ public class Menu_Principal extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu6;
     private javax.swing.JMenu jMenu7;
     private javax.swing.JMenu jMenu8;
-    private javax.swing.JMenu jMenu9;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuBar jMenuBar2;
     private javax.swing.JMenuBar jMenuBar3;
@@ -473,6 +519,7 @@ public class Menu_Principal extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem14;
     private javax.swing.JMenuItem jMenuItem15;
     private javax.swing.JMenuItem jMenuItem16;
+    private javax.swing.JMenuItem jMenuItem18;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;

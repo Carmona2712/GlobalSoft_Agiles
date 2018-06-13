@@ -59,7 +59,7 @@ public class Controlador_Recurso {
         }
     }
 
-    public int RegistrarPedido(Recurso r) {
+    public int RegistrarRecurso(Recurso r) {
         int exi = 0;
         String sql = "INSERT INTO `recurso`(`codigo`, `recurso`, `tipo`, `marca`, `cantidad`, `precio`, `fecha_adq`, `fecha_garantia`, `cod_factura`, `codigo_seguro`, `nombre_seguro`, `imagen`) VALUES ('" + r.getCodigo() + "','" + r.getNom_recurso() + "','" + r.getTipo() + "','" + r.getMaraca() + "'," + r.getCantidad() + "," + r.getPrecio() + ",'" + r.getFecha_adq() + "','" + r.getFecha_garantia() + "','" + r.getCod_factura() + "','" + r.getCod_seguro() + "','" + r.getNombre_seguro() + "','" + r.getImagen() + "')";
         try {
@@ -89,12 +89,12 @@ public class Controlador_Recurso {
 
         try {
             Conectar();
-            String sql = "Select * from recurso order by recurso";
+            String sql = "Select * from recurso";
             st = con.createStatement();
             rs = st.executeQuery(sql);
             while (rs.next()) {
                 Recurso r = new Recurso();
-                r.setCod_seguro(rs.getString(1));
+                r.setCodigo(rs.getString(1));
                 r.setNom_recurso(rs.getString(2));
                 r.setTipo(rs.getString(3));
                 r.setMaraca(rs.getString(4));
@@ -117,22 +117,35 @@ public class Controlador_Recurso {
     }
 
     public Recurso RetornarRecursoxCodigo(String cod) {
-        Recurso re = null;
-        for (Recurso r : this.ListadoRecursoss()) {
-            if (r.getCodigo().equals(cod)) {
-                re = r;
+        Recurso re = new Recurso();
+        re = null;
+        try {
+            if (this.ListadoRecursoss().isEmpty()) {
+                System.out.println("lista vacia !!!");
             }
+            for (Recurso r : this.ListadoRecursoss()) {
+                if (r.getCodigo().equals(cod)) {
+                    re = r;
+                }
+            }
+
+        } catch (java.lang.NullPointerException ex) {
+            JOptionPane.showMessageDialog(null, "Error en : " + ex.getMessage());
+            re = null;
         }
         return re;
     }
 
     public int ModificarRecurso(Recurso r) {
         int exi = 0;
+       
         String sql = "UPDATE `recurso` SET `recurso`='" + r.getNom_recurso() + "',`tipo`='" + r.getTipo() + "',`marca`='" + r.getMaraca() + "',`cantidad`=" + r.getCantidad() + ",`precio`=" + r.getPrecio() + ",`fecha_adq`='" + r.getFecha_adq() + "',`fecha_garantia`='" + r.getFecha_garantia() + "',`cod_factura`='" + r.getCod_factura() + "',`codigo_seguro`='" + r.getCod_seguro() + "',`nombre_seguro`='" + r.getNombre_seguro() + "',`imagen`='" + r.getImagen() + "' WHERE codigo = '" + r.getCodigo() + "'";
+        String sql2 =  "UPDATE `recurso` SET `recurso`='" + r.getNom_recurso() + "',`tipo`='" + r.getTipo() + "',`marca`='" + r.getMaraca() + "',`cantidad`=" + r.getCantidad() + ",`precio`=" + r.getPrecio() + ",`fecha_adq`='" + r.getFecha_adq() + "',`fecha_garantia`='" + r.getFecha_garantia() + "',`cod_factura`='" + r.getCod_factura() + "',`codigo_seguro`='" + r.getCod_seguro() + "',`nombre_seguro`='" + r.getNombre_seguro() + "' WHERE codigo = '" + r.getCodigo() + "'";
+
         try {
             Conectar();
             //System.out.println(sql);
-            System.out.println(sql);
+            System.out.println(sql2);
             st = con.createStatement();
             //st.execute(sql);
             if (st.executeUpdate(sql) > 0) {
@@ -145,6 +158,8 @@ public class Controlador_Recurso {
             JOptionPane.showMessageDialog(null, ex.getMessage() + " en el Controlado Recurso -- Modificar", "Error", JOptionPane.ERROR_MESSAGE);
             // System.out.println(sql);
             exi = 0;
+        }catch(java.lang.NullPointerException ex2){
+            JOptionPane.showMessageDialog(null, ex2.getMessage());
         }
 
         return exi;

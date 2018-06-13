@@ -5,14 +5,32 @@
  */
 package aplicacionglobalfoodtrading.Vista;
 
+import aplicacionglobalfoodtrading.Controlador.ControladorBodega;
+import aplicacionglobalfoodtrading.Controlador.ControladorCategoria;
+import aplicacionglobalfoodtrading.Controlador.ControladorImpuesto;
+import aplicacionglobalfoodtrading.Controlador.ControladorOtroImp;
 import aplicacionglobalfoodtrading.Controlador.ControladorProducto;
 import aplicacionglobalfoodtrading.Controlador.ControladorProveedor;
+import aplicacionglobalfoodtrading.Controlador.ControladorSubcategoria;
 import aplicacionglobalfoodtrading.Modelo.Empleado_Directo;
 import aplicacionglobalfoodtrading.Modelo.Producto;
 import aplicacionglobalfoodtrading.Modelo.Proveedor;
+import aplicacionglobalfoodtrading.Modelo.Recurso;
+import java.awt.Desktop;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 
 /**
  *
@@ -23,6 +41,12 @@ public class Lista_Productos extends javax.swing.JFrame {
     DefaultTableModel modelo = new DefaultTableModel();
     ControladorProducto cp = new ControladorProducto();
     ControladorProveedor cprov = new ControladorProveedor();
+    ControladorCategoria cc = new ControladorCategoria();
+    ControladorSubcategoria cs = new ControladorSubcategoria();
+    ControladorBodega cb = new ControladorBodega();
+    ControladorImpuesto ci = new ControladorImpuesto();
+    ControladorOtroImp co = new ControladorOtroImp();
+    
     public Lista_Productos() {
         initComponents();
         CrearTabla();
@@ -63,6 +87,120 @@ public class Lista_Productos extends javax.swing.JFrame {
             modelo.removeRow(0);
         }
     }
+    
+    
+    public void exportarExcel(ArrayList<Producto> lr) throws IOException {
+        JFileChooser chooser = new JFileChooser();
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Archivos de excel", "xls");
+        chooser.setFileFilter(filter);
+        chooser.setDialogTitle("Guardar archivo");
+        chooser.setAcceptAllFileFilterUsed(false);
+        if (chooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+            String ruta = chooser.getSelectedFile().toString().concat(".xls");
+            try {
+                File archivoXLS = new File(ruta);
+                if (archivoXLS.exists()) {
+                    archivoXLS.delete();
+                }
+                archivoXLS.createNewFile();
+                Workbook libro = new HSSFWorkbook();
+                FileOutputStream archivo = new FileOutputStream(archivoXLS);
+                Sheet hoja = libro.createSheet("Listado Productos");
+                hoja.setDisplayGridlines(true);
+                String[] titulos = {"CÓDIGO", "NOMBRE", "TIPO", "PROVEEDOR", "COSTO PRODUCTO", "COSTO EN DOLAR", "PRECIO DE VENTA", "UTILIDAD", "CATEGORIA", "SUBCATEGORIA", "BODEGA","SE VENDE X","VENTA CONTIENE","SE COMPRA X","COMPRA CONTIENE","TIPO","ESTA ACTIVO","NOMBRE IMPUESTO 1","APLICA VENTA","APLICA COMPRA","NOMBRE IMPUESTO 2","APLICA VENTA","APLICA COMPRA","PRECIO NETO PRODUCTO","PRECIO MAS IMPUESTOS"};
+
+                for (int f = 0; f < titulos.length; f++) {
+                    org.apache.poi.ss.usermodel.Row fila = hoja.createRow(f);
+                    for (int c = 0; c < titulos.length; c++) {
+                        Cell celda = fila.createCell(c);
+                        if (f == 0) {
+                            celda.setCellValue(titulos[c].toString());
+                        }
+                    }
+                }
+                //int filaInicio = 1;
+//                for (int f = 0; f < li.size(); f++) {
+//                    org.apache.poi.ss.usermodel.Row fila = hoja.createRow(filaInicio);
+//                    filaInicio++;
+//                    for (int c = 0; c < titulos.length; c++) {
+//                        Cell celda = fila.createCell(c);
+//                        if (t.getValueAt(f, c) instanceof Double) {
+//                            celda.setCellValue(Double.parseDouble(t.getValueAt(f, c).toString()));
+//                        } else if (t.getValueAt(f, c) instanceof Float) {
+//                            celda.setCellValue(Float.parseFloat((String) t.getValueAt(f, c)));
+//                        } else {
+//                            celda.setCellValue(String.valueOf(t.getValueAt(f, c)));
+//                        }
+//                    }
+//                }
+                    
+                int filaInicio = 1;
+                for (int i = 0; i < lr.size(); i++) {
+                    
+                    String imp1,imp2,imp1ven,imp1comp,imp2vent,imp2comp;
+                    
+                    if(ci.RetornarImpuestoxCod(lr.get(i).getFk_impuesto1())==null){
+                        imp1 = "Ninguno";
+                        imp1comp = "No";
+                        imp1ven = "No";
+                    }else{
+                        imp1 = ci.RetornarImpuestoxCod(lr.get(i).getFk_impuesto1()).getDescripcion();
+                        
+                        if(lr.get(i).getImpuesto1_aplic_compra()==1){
+                            imp1comp = "Si";
+                        }else{
+                            imp1comp = "No";
+                        }
+                        
+                        if(lr.get(i).getImpuesto1_aplic_venta()==1){
+                            imp1ven = "Si";
+                        }else{
+                            imp1ven = "No";
+                        }
+                        
+                    }
+                    
+                    if(co.RetornarOtroImpuestoxCod(lr.get(i).getFk_impuesto2())==null){
+                        imp2 = "Ninguno";
+                        imp2comp = "No";
+                        imp2vent = "No";
+                    }else{
+                        imp2 = co.RetornarOtroImpuestoxCod(lr.get(i).getFk_impuesto2()).getDescripcion();
+                        
+                        if(lr.get(i).getImpuesto2_aplic_compra()==1){
+                            imp2comp = "Si";
+                        }else{
+                            imp2comp = "No";
+                        }
+                        
+                        if(lr.get(i).getImpuesto2_aplic_venta()==1){
+                            imp2vent = "Si";
+                        }else{
+                            imp2vent = "No";
+                        }
+                        
+                    }
+                    
+                    
+                    org.apache.poi.ss.usermodel.Row fila = hoja.createRow(filaInicio);
+                    filaInicio++;
+                    String datos[] = {lr.get(i).getCod_prod(),lr.get(i).getNombre_prod(),lr.get(i).getTipo_prod(),this.cprov.ProvedorxCodigo(lr.get(i).getFk_proveedor()).getNombre(),String.valueOf(lr.get(i).getPrec_cost_prod()),String.valueOf(lr.get(i).getPrec_cost_prod_dolar()),String.valueOf(lr.get(i).getPrec_vent_prod()),String.valueOf(lr.get(i).getUtilidad_prod()),cc.RetornarCategoriaxCod(lr.get(i).getFk_categoria()).getCategoria(),cs.RetornarSubcategoriaxCod(lr.get(i).getFk_subcategoria()).getNombre(),cb.RetornarBodegaxCod(lr.get(i).getFk_bodega()).getNombre_b(),lr.get(i).getSe_vende_x(),String.valueOf(lr.get(i).getVende_contiene()),lr.get(i).getSe_Compra_x(),String.valueOf(lr.get(i).getCompra_contiene()),lr.get(i).getTipo_prod(),String.valueOf(lr.get(i).getEsta_activo()),imp1,imp1ven,imp1comp,imp2,imp2vent,imp2comp,String.valueOf(lr.get(i).getPrecio_neto_prod()),String.valueOf(lr.get(i).getPrecio_mas_impuesto())};
+                    for (int c = 0; c < datos.length; c++) {
+                        Cell celda = fila.createCell(c);
+                        System.out.println(datos[c]);
+                        celda.setCellValue(datos[c]);
+                    }
+
+                }
+
+                libro.write(archivo);
+                archivo.close();
+                Desktop.getDesktop().open(archivoXLS);
+            } catch (IOException | NumberFormatException e) {
+                throw e;
+            }
+        }
+    }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -79,6 +217,7 @@ public class Lista_Productos extends javax.swing.JFrame {
         CboOpcion = new javax.swing.JComboBox<>();
         btnBuscar = new javax.swing.JButton();
         txtbuscar = new javax.swing.JTextField();
+        jButton3 = new javax.swing.JButton();
 
         jMenuItem1.setText("Ver Informacion Completa");
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
@@ -151,11 +290,11 @@ public class Lista_Productos extends javax.swing.JFrame {
             }
         });
 
-        btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/aplicacionglobalfoodtrading/Iconos/1477811446_Search32x32.png"))); // NOI18N
+        btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/aplicacionglobalfoodtrading/Iconos/Buscar32x32.png"))); // NOI18N
         btnBuscar.setBorderPainted(false);
         btnBuscar.setContentAreaFilled(false);
         btnBuscar.setFocusPainted(false);
-        btnBuscar.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/aplicacionglobalfoodtrading/Iconos/1477811460_Search48x48.png"))); // NOI18N
+        btnBuscar.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/aplicacionglobalfoodtrading/Iconos/Buscar48x48.png"))); // NOI18N
         btnBuscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBuscarActionPerformed(evt);
@@ -169,20 +308,34 @@ public class Lista_Productos extends javax.swing.JFrame {
             }
         });
 
+        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/aplicacionglobalfoodtrading/Iconos/excel32_x_32.png"))); // NOI18N
+        jButton3.setToolTipText("Exportar Listado de productos a excel");
+        jButton3.setBorderPainted(false);
+        jButton3.setContentAreaFilled(false);
+        jButton3.setFocusPainted(false);
+        jButton3.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/aplicacionglobalfoodtrading/Iconos/excel_48_x_48 (2).png"))); // NOI18N
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(52, Short.MAX_VALUE)
+                .addContainerGap()
                 .addComponent(txtbuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(CboOpcion, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
+                .addComponent(CboOpcion, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(70, 70, 70)
                 .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(75, 75, 75)
                 .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(22, 22, 22))
+                .addGap(47, 47, 47)
+                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(33, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -194,6 +347,10 @@ public class Lista_Productos extends javax.swing.JFrame {
                     .addComponent(txtbuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 69, Short.MAX_VALUE))
                 .addGap(13, 13, 13))
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -206,12 +363,12 @@ public class Lista_Productos extends javax.swing.JFrame {
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(115, 115, 115)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(280, 280, 280)
-                        .addComponent(jLabel1)))
-                .addContainerGap(212, Short.MAX_VALUE))
+                        .addComponent(jLabel1))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(26, 26, 26)
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(46, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -317,6 +474,15 @@ public class Lista_Productos extends javax.swing.JFrame {
         
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        try {
+            // TODO add your handling code here:
+            exportarExcel(cp.ListadoProductos());
+        } catch (IOException ex) {
+          JOptionPane.showMessageDialog(null,"Error al crear hoja de excel : "+ex.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -358,6 +524,7 @@ public class Lista_Productos extends javax.swing.JFrame {
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;

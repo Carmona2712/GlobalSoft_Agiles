@@ -188,11 +188,11 @@ public class Listado_Pedidos extends javax.swing.JFrame {
             }
         });
 
-        btnBuscar3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/aplicacionglobalfoodtrading/Iconos/1477811446_Search32x32.png"))); // NOI18N
+        btnBuscar3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/aplicacionglobalfoodtrading/Iconos/Buscar32x32.png"))); // NOI18N
         btnBuscar3.setBorderPainted(false);
         btnBuscar3.setContentAreaFilled(false);
         btnBuscar3.setFocusPainted(false);
-        btnBuscar3.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/aplicacionglobalfoodtrading/Iconos/1477811460_Search48x48.png"))); // NOI18N
+        btnBuscar3.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/aplicacionglobalfoodtrading/Iconos/Buscar48x48.png"))); // NOI18N
         btnBuscar3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBuscar3ActionPerformed(evt);
@@ -420,40 +420,20 @@ public class Listado_Pedidos extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> CboOpcion;
-    private javax.swing.JComboBox<String> CboOpcion1;
     private javax.swing.JComboBox<String> CboOpcion3;
     private javax.swing.JTable TablaPedido;
-    private javax.swing.JButton btnBuscar;
-    private javax.swing.JButton btnBuscar1;
     private javax.swing.JButton btnBuscar3;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
-    private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JScrollPane jScrollPane1;
-    private datechooser.beans.DateChooserCombo txtFechaFinal;
-    private datechooser.beans.DateChooserCombo txtFechaFinal1;
     private datechooser.beans.DateChooserCombo txtFechaFinal3;
-    private datechooser.beans.DateChooserCombo txtFechaInicial;
-    private datechooser.beans.DateChooserCombo txtFechaInicial1;
     private datechooser.beans.DateChooserCombo txtFechaInicial3;
-    private javax.swing.JTextField txtbuscar;
-    private javax.swing.JTextField txtbuscar1;
     private javax.swing.JTextField txtbuscar3;
     // End of variables declaration//GEN-END:variables
 }

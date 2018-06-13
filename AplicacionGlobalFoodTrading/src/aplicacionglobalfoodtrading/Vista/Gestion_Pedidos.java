@@ -146,7 +146,7 @@ public class Gestion_Pedidos extends javax.swing.JFrame {
         String[] fechar;
         String fechaf;
 
-        fechar = fecha.split("-");
+        fechar = fecha.split("/");
         dia = fechar[1];
         mes = fechar[0];
         anio = fechar[2];

@@ -1459,15 +1459,15 @@
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace min="-2" pref="175" max="-2" attributes="0"/>
-                          <Component id="btnGuardar" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="72" max="-2" attributes="0"/>
-                          <Component id="btnBuscar" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="61" max="-2" attributes="0"/>
-                          <Component id="btnEditar" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="32767" attributes="0"/>
+                          <EmptySpace min="-2" pref="160" max="-2" attributes="0"/>
+                          <Component id="btnGuardar" min="-2" pref="91" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="50" max="-2" attributes="0"/>
+                          <Component id="btnBuscar" min="-2" pref="86" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="52" max="-2" attributes="0"/>
+                          <Component id="btnEditar" min="-2" pref="95" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="56" max="-2" attributes="0"/>
                           <Component id="btnLista" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="70" max="-2" attributes="0"/>
+                          <EmptySpace max="32767" attributes="0"/>
                           <Component id="btnLimpiar" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="55" max="-2" attributes="0"/>
                           <Component id="jButton8" min="-2" max="-2" attributes="0"/>
@@ -1487,11 +1487,11 @@
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="btnGuardar" pref="66" max="32767" attributes="0"/>
+                              <Component id="btnBuscar" max="32767" attributes="0"/>
                               <Component id="btnEditar" alignment="1" max="32767" attributes="0"/>
                               <Component id="jButton8" alignment="0" max="32767" attributes="0"/>
                               <Component id="btnLista" alignment="0" max="32767" attributes="0"/>
-                              <Component id="btnBuscar" alignment="0" max="32767" attributes="0"/>
-                              <Component id="btnGuardar" alignment="0" pref="66" max="32767" attributes="0"/>
                               <Component id="btnLimpiar" alignment="0" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
@@ -1527,14 +1527,14 @@
                 <Component class="javax.swing.JButton" name="btnEditar">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="/aplicacionglobalfoodtrading/Iconos/1479450025_edit-file32x32.png"/>
+                      <Image iconType="3" name="/aplicacionglobalfoodtrading/Iconos/Editar32x32.png"/>
                     </Property>
                     <Property name="toolTipText" type="java.lang.String" value="Reescribir informacion del empleado"/>
                     <Property name="borderPainted" type="boolean" value="false"/>
                     <Property name="contentAreaFilled" type="boolean" value="false"/>
                     <Property name="focusPainted" type="boolean" value="false"/>
                     <Property name="rolloverIcon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="/aplicacionglobalfoodtrading/Iconos/1479450710_edit-file48x48.png"/>
+                      <Image iconType="3" name="/aplicacionglobalfoodtrading/Iconos/Editar48x48.png"/>
                     </Property>
                   </Properties>
                   <Events>
@@ -1595,14 +1595,14 @@
                 <Component class="javax.swing.JButton" name="btnBuscar">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="/aplicacionglobalfoodtrading/Iconos/1477811446_Search32x32.png"/>
+                      <Image iconType="3" name="/aplicacionglobalfoodtrading/Iconos/Buscar32x32.png"/>
                     </Property>
                     <Property name="toolTipText" type="java.lang.String" value="Buscar  Empleado mediante su identificacion"/>
                     <Property name="borderPainted" type="boolean" value="false"/>
                     <Property name="contentAreaFilled" type="boolean" value="false"/>
                     <Property name="focusPainted" type="boolean" value="false"/>
                     <Property name="rolloverIcon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="/aplicacionglobalfoodtrading/Iconos/1477811460_Search48x48.png"/>
+                      <Image iconType="3" name="/aplicacionglobalfoodtrading/Iconos/Buscar48x48.png"/>
                     </Property>
                   </Properties>
                   <Events>

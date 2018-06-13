@@ -5,61 +5,67 @@
  */
 package aplicacionglobalfoodtrading.Vista;
 
-import aplicacionglobalfoodtrading.Controlador.ControladorImpuesto;
-import aplicacionglobalfoodtrading.Controlador.ControladorProducto;
-import aplicacionglobalfoodtrading.Controlador.ControladorProveedor;
+import aplicacionglobalfoodtrading.Controlador.Controlador_Recurso;
 import aplicacionglobalfoodtrading.Modelo.Empleado_Directo;
-import aplicacionglobalfoodtrading.Modelo.Producto;
-import aplicacionglobalfoodtrading.Modelo.Proveedor;
+import aplicacionglobalfoodtrading.Modelo.Empleado_Indirecto;
+import aplicacionglobalfoodtrading.Modelo.Recurso;
+import java.awt.Desktop;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 
 /**
  *
- * @author Ricardo Andres
+ * @author Ricardo Carmona
  */
-public class Lista_Productos_Pedidos extends javax.swing.JFrame {
-
+public class Listado_Recursos extends javax.swing.JFrame {
+    Controlador_Recurso cr = new Controlador_Recurso();
     DefaultTableModel modelo = new DefaultTableModel();
-    ControladorProducto cp = new ControladorProducto();
-    ControladorProveedor cprov = new ControladorProveedor();
-    ControladorImpuesto ci = new ControladorImpuesto();
-
-    public Lista_Productos_Pedidos() {
+    public Listado_Recursos() {
         initComponents();
         CrearTabla();
         CargarTablaGeneral();
     }
-
-    public void CrearTabla() {
-        String titulos[] = {"Codigo", "Nombre", "Proveedor", "Precio de Costo", "Precio Venta", "Utilidad", "Tipo Producto", "Precio Neto", "Precio + Impuesto"};
+public void CrearTabla() {
+        String titulos[] = {"código","Nombre","Tipo","Cantidad","Precio"};
         modelo.setColumnIdentifiers(titulos);
-        TablaProductos.setModel(modelo);
+        TablaRecursos.setModel(modelo);
     }
 
     public void CargarTablaGeneral() {
-        ArrayList<Producto> lp = new ArrayList();
+        ArrayList<Recurso> led = new ArrayList();
         try {
             LimpiarTabla();
-            lp = this.cp.ListadoProductos();
+            led = this.cr.ListadoRecursoss();
 
 //                 for(Empleado_Directo d : led){
 //                     System.out.println("Cedula : "+d.getIdentificacion());
 //                 }
-            for (Producto p : lp) {
-                Proveedor pr = cprov.ProvedorxCodigo(p.getFk_proveedor());
-                System.err.println(pr.getNombre());
-                String datos[] = {p.getCod_prod(), p.getNombre_prod(), pr.getNombre(), String.valueOf(p.getPrec_cost_prod()), String.valueOf(p.getPrec_vent_prod()), String.valueOf(p.getUtilidad_prod()), p.getTipo_prod(), String.valueOf(p.getPrecio_neto_prod()), String.valueOf(p.getPrecio_mas_impuesto())};
+            if (led.isEmpty()) {
+                System.out.println("Esta vacio el arraylist");
+            }
+
+            for (Recurso r : led) {
+                String datos[] = {r.getCodigo(),r.getNom_recurso(),r.getTipo(),String.valueOf(r.getCantidad()),String.valueOf(r.getPrecio())};
                 modelo.addRow(datos);
             }
         } catch (java.lang.NullPointerException ex) {
             JOptionPane.showMessageDialog(null, "Error de carga de datos en tabla " + ex.getMessage());
         }
     }
-
-    public void LimpiarTabla() {
-        int filas = TablaProductos.getRowCount();
+    
+    
+     public void LimpiarTabla() {
+        int filas = TablaRecursos.getRowCount();
         for (int i = 0; filas > i; i++) {
             modelo.removeRow(0);
         }
@@ -73,7 +79,7 @@ public class Lista_Productos_Pedidos extends javax.swing.JFrame {
         jMenuItem1 = new javax.swing.JMenuItem();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        TablaProductos = new javax.swing.JTable();
+        TablaRecursos = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
@@ -81,8 +87,9 @@ public class Lista_Productos_Pedidos extends javax.swing.JFrame {
         CboOpcion = new javax.swing.JComboBox<>();
         btnBuscar = new javax.swing.JButton();
         txtbuscar = new javax.swing.JTextField();
+        btnExportarExcel = new javax.swing.JButton();
 
-        jMenuItem1.setText("Seleccionar Producto");
+        jMenuItem1.setText("Ver Recurso");
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem1ActionPerformed(evt);
@@ -90,11 +97,11 @@ public class Lista_Productos_Pedidos extends javax.swing.JFrame {
         });
         jPopupMenu1.add(jMenuItem1);
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
-        TablaProductos.setModel(new javax.swing.table.DefaultTableModel(
+        TablaRecursos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -102,18 +109,18 @@ public class Lista_Productos_Pedidos extends javax.swing.JFrame {
 
             }
         ));
-        TablaProductos.setComponentPopupMenu(jPopupMenu1);
-        TablaProductos.addMouseListener(new java.awt.event.MouseAdapter() {
+        TablaRecursos.setComponentPopupMenu(jPopupMenu1);
+        TablaRecursos.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                TablaProductosMouseClicked(evt);
+                TablaRecursosMouseClicked(evt);
             }
         });
-        TablaProductos.addKeyListener(new java.awt.event.KeyAdapter() {
+        TablaRecursos.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                TablaProductosKeyPressed(evt);
+                TablaRecursosKeyPressed(evt);
             }
         });
-        jScrollPane1.setViewportView(TablaProductos);
+        jScrollPane1.setViewportView(TablaRecursos);
 
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/aplicacionglobalfoodtrading/Iconos/Previous32x32.png"))); // NOI18N
         jButton1.setToolTipText("Volver a la pagina anterior");
@@ -128,13 +135,13 @@ public class Lista_Productos_Pedidos extends javax.swing.JFrame {
         });
 
         jLabel1.setFont(new java.awt.Font("Arial", 0, 24)); // NOI18N
-        jLabel1.setText("LISTADO DE PRODUCTOS");
+        jLabel1.setText("LISTADO DE RECURSOS FISICOS");
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
         jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/aplicacionglobalfoodtrading/Iconos/Informacion_Adcional_48x48.png"))); // NOI18N
-        jButton2.setToolTipText("Seleccionar Producto");
+        jButton2.setToolTipText("Informacion mas detallada");
         jButton2.setBorderPainted(false);
         jButton2.setContentAreaFilled(false);
         jButton2.setFocusPainted(false);
@@ -146,7 +153,7 @@ public class Lista_Productos_Pedidos extends javax.swing.JFrame {
         });
 
         CboOpcion.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
-        CboOpcion.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Codigo", "Nombre", "Proveedor", "Tipo", "Inactivos" }));
+        CboOpcion.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Código", "Nombre", "Tipo" }));
         CboOpcion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 CboOpcionActionPerformed(evt);
@@ -171,20 +178,34 @@ public class Lista_Productos_Pedidos extends javax.swing.JFrame {
             }
         });
 
+        btnExportarExcel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/aplicacionglobalfoodtrading/Iconos/excel32_x_32.png"))); // NOI18N
+        btnExportarExcel.setToolTipText("Exportar a excel");
+        btnExportarExcel.setBorderPainted(false);
+        btnExportarExcel.setContentAreaFilled(false);
+        btnExportarExcel.setFocusPainted(false);
+        btnExportarExcel.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/aplicacionglobalfoodtrading/Iconos/excel_48_x_48 (2).png"))); // NOI18N
+        btnExportarExcel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExportarExcelActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(52, Short.MAX_VALUE)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(txtbuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(CboOpcion, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(22, 22, 22))
+                .addComponent(CboOpcion, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(30, 30, 30)
+                .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(btnExportarExcel, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -192,28 +213,33 @@ public class Lista_Productos_Pedidos extends javax.swing.JFrame {
                 .addGap(13, 13, 13)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(CboOpcion, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnBuscar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtbuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 69, Short.MAX_VALUE))
-                .addGap(13, 13, 13))
+                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnExportarExcel, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(115, 115, 115)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap()
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(185, 185, 185)
+                                .addComponent(jLabel1))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(76, 76, 76)
+                                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(280, 280, 280)
-                        .addComponent(jLabel1)))
-                .addContainerGap(212, Short.MAX_VALUE))
+                        .addGap(27, 27, 27)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 993, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(25, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -225,8 +251,9 @@ public class Lista_Productos_Pedidos extends javax.swing.JFrame {
                         .addComponent(jLabel1)
                         .addGap(18, 18, 18)
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 81, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(50, 50, 50)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 307, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(35, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -237,24 +264,24 @@ public class Lista_Productos_Pedidos extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void TablaProductosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TablaProductosMouseClicked
+    private void TablaRecursosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TablaRecursosMouseClicked
         if (evt.getClickCount() == 1) {
             System.out.println("Se ha hecho un click");
         }
         if (evt.getClickCount() == 2) {
             System.out.println("Se ha hecho doble click");
         }
-    }//GEN-LAST:event_TablaProductosMouseClicked
+    }//GEN-LAST:event_TablaRecursosMouseClicked
 
-    private void TablaProductosKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TablaProductosKeyPressed
+    private void TablaRecursosKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TablaRecursosKeyPressed
         // TODO add your handling code here:
-    }//GEN-LAST:event_TablaProductosKeyPressed
+    }//GEN-LAST:event_TablaRecursosKeyPressed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
@@ -262,16 +289,8 @@ public class Lista_Productos_Pedidos extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        if (TablaProductos.getSelectedRow() < 0) {
-            JOptionPane.showMessageDialog(null, "Debe seleccionar un producto");
-        } else {
-            int f = TablaProductos.getSelectedRow();
-            int c = 0;
-            String codigo = TablaProductos.getValueAt(f, c).toString();
-            Producto p = cp.RetornarProductoxCod(codigo);
-            float vi = ci.RetornarImpuestoxCod(p.getFk_impuesto1()).getValor();
-            Gestion_Pedidos.AgregarProducto(p,vi);
-        }
+        // TODO add your handling code here:
+     
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void CboOpcionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CboOpcionActionPerformed
@@ -285,67 +304,100 @@ public class Lista_Productos_Pedidos extends javax.swing.JFrame {
     private void txtbuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtbuscarKeyReleased
         // TODO add your handling code here:
 
-////        if (CboOpcion.getSelectedItem().toString().equals("Pais")) {
-////            CargarTablaxPais();
-////        }
-////        if (CboOpcion.getSelectedItem().toString().equals("Apellido")) {
-////            CargarTablaGeneral();
-////        }
-////        if (CboOpcion.getSelectedItem().toString().equals("Identificacion")) {
-////            CargarTablaxIdentificacion();
-////        }
-////        if (CboOpcion.getSelectedItem().toString().equals("Cargo")) {
-////            CargarTablaxCargo();
-////        }
-
     }//GEN-LAST:event_txtbuscarKeyReleased
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         // TODO add your handling code here:
-        if (TablaProductos.getSelectedRow() < 0) {
-            JOptionPane.showMessageDialog(null, "Debe seleccionar un producto");
-        } else {
-            int f = TablaProductos.getSelectedRow();
+        if(TablaRecursos.getSelectedRow()<0){
+            JOptionPane.showMessageDialog(null,"Debes seleccionar una fila");
+        }else{
+            int f = TablaRecursos.getSelectedRow();
             int c = 0;
-            int cant = -1;
-            String codigo = TablaProductos.getValueAt(f, c).toString();
-            Producto p = cp.RetornarProductoxCod(codigo);
-            do {
-
-                try {
-                    cant = Integer.parseInt(JOptionPane.showInputDialog(null, "Ingrese la cantidad de productos"));
-                } catch (java.lang.NumberFormatException ex) {
-                    JOptionPane.showMessageDialog(null, "Debe ser un valor numerico o un valor positivo ( # > 0)");
-                    cant = -1;
-                }
-
-            } while (cant <= 0);
-            float valortotalpedido = p.getPrecio_mas_impuesto() * cant;
-            float totalivaxprod = (ci.RetornarImpuestoxCod(p.getFk_impuesto1()).getValor() * p.getPrecio_neto_prod() / 100) * cant;
-            System.err.println(cant);
-            System.err.println(ci.RetornarImpuestoxCod(p.getFk_impuesto1()).getValor());
-            System.err.println(valortotalpedido);
-            String datos_producto[] = {p.getCod_prod(), p.getNombre_prod(), String.valueOf(cant), String.valueOf(p.getPrecio_neto_prod()), String.valueOf(ci.RetornarImpuestoxCod(p.getFk_impuesto1()).getValor()),String.valueOf(totalivaxprod), String.valueOf(valortotalpedido)};
-            Gestion_Pedidos.modelo_Pedido.addRow(datos_producto);
+            String cod = TablaRecursos.getValueAt(f, c).toString();
             
-            int filap = Gestion_Pedidos.tabla_Pedido.getRowCount();
-            
-            float totaliva = 0;
-            float totalpago = 0;
-            System.err.println("numero de filas = "+filap);
-            
-            for(int i=0;i<filap;i++){
-                totaliva = totaliva + Float.parseFloat(Gestion_Pedidos.modelo_Pedido.getValueAt(i,5).toString());
-                totalpago = totalpago + Float.parseFloat(Gestion_Pedidos.modelo_Pedido.getValueAt(i,6).toString());
-            }
-            
-            Gestion_Pedidos.lblTotalIva.setText(String.valueOf(totaliva));
-            Gestion_Pedidos.lblTotalPagar.setText(String.valueOf(totalpago));
-            
+            Recurso r;
+            r = cr.RetornarRecursoxCodigo(cod);
+            Gestion_Recurso gr = new Gestion_Recurso(r);
+            gr.setVisible(true);
         }
-
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
+    private void btnExportarExcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportarExcelActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnExportarExcelActionPerformed
+
+    
+    public void exportarExcel(ArrayList<Recurso> lr) throws IOException {
+        JFileChooser chooser = new JFileChooser();
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Archivos de excel", "xls");
+        chooser.setFileFilter(filter);
+        chooser.setDialogTitle("Guardar archivo");
+        chooser.setAcceptAllFileFilterUsed(false);
+        if (chooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+            String ruta = chooser.getSelectedFile().toString().concat(".xls");
+            try {
+                File archivoXLS = new File(ruta);
+                if (archivoXLS.exists()) {
+                    archivoXLS.delete();
+                }
+                archivoXLS.createNewFile();
+                Workbook libro = new HSSFWorkbook();
+                FileOutputStream archivo = new FileOutputStream(archivoXLS);
+                Sheet hoja = libro.createSheet("Listado Recursos");
+                hoja.setDisplayGridlines(true);
+                String[] titulos = {"CÓDIGO", "RECURSO", "TIPO", "MARCA", "CANTIDAD", "PRECIO", "FECHA ADQUISICIÓN", "FECHA LIMITE GARANTÍA", "CÓDIGO FACTURA", "CÓDIGO SEGURO", "NOMBRE EMPRESA DE SEGURO"};
+
+                for (int f = 0; f < titulos.length; f++) {
+                    org.apache.poi.ss.usermodel.Row fila = hoja.createRow(f);
+                    for (int c = 0; c < titulos.length; c++) {
+                        Cell celda = fila.createCell(c);
+                        if (f == 0) {
+                            celda.setCellValue(titulos[c].toString());
+                        }
+                    }
+                }
+                //int filaInicio = 1;
+//                for (int f = 0; f < li.size(); f++) {
+//                    org.apache.poi.ss.usermodel.Row fila = hoja.createRow(filaInicio);
+//                    filaInicio++;
+//                    for (int c = 0; c < titulos.length; c++) {
+//                        Cell celda = fila.createCell(c);
+//                        if (t.getValueAt(f, c) instanceof Double) {
+//                            celda.setCellValue(Double.parseDouble(t.getValueAt(f, c).toString()));
+//                        } else if (t.getValueAt(f, c) instanceof Float) {
+//                            celda.setCellValue(Float.parseFloat((String) t.getValueAt(f, c)));
+//                        } else {
+//                            celda.setCellValue(String.valueOf(t.getValueAt(f, c)));
+//                        }
+//                    }
+//                }
+
+                int filaInicio = 1;
+                for (int i = 0; i < lr.size(); i++) {
+                    org.apache.poi.ss.usermodel.Row fila = hoja.createRow(filaInicio);
+                    filaInicio++;
+                    String datos[] = {lr.get(i).getCodigo(),lr.get(i).getNom_recurso(),lr.get(i).getTipo(),lr.get(i).getMaraca(),String.valueOf(lr.get(i).getCantidad()),String.valueOf(lr.get(i).getPrecio()),lr.get(i).getFecha_adq(),lr.get(i).getFecha_garantia(),lr.get(i).getCod_factura(),lr.get(i).getCod_seguro(),lr.get(i).getNombre_seguro()};
+                    for (int c = 0; c < datos.length; c++) {
+                        Cell celda = fila.createCell(c);
+                        System.out.println(datos[c]);
+                        celda.setCellValue(datos[c]);
+                    }
+
+                }
+
+                libro.write(archivo);
+                archivo.close();
+                Desktop.getDesktop().open(archivoXLS);
+            } catch (IOException | NumberFormatException e) {
+                throw e;
+            }
+        }
+    }
+    
+    
+    
+    
+    
     /**
      * @param args the command line arguments
      */
@@ -357,37 +409,35 @@ public class Lista_Productos_Pedidos extends javax.swing.JFrame {
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
+                if ("Windows".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Lista_Productos_Pedidos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Listado_Recursos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Lista_Productos_Pedidos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Listado_Recursos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Lista_Productos_Pedidos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Listado_Recursos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Lista_Productos_Pedidos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Listado_Recursos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Lista_Productos_Pedidos().setVisible(true);
+                new Listado_Recursos().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> CboOpcion;
-    private javax.swing.JTable TablaProductos;
+    private javax.swing.JTable TablaRecursos;
     private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btnExportarExcel;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
